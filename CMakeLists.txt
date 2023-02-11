@@ -322,9 +322,9 @@ option(BUILD_TESTING "Build the testing tree." ON)
 
 if(BUILD_TESTING)
     enable_testing()
-    add_test(NAME CheckVersion
+    add_test(NAME SQLiteShellCheckVersion
         COMMAND SQLite::Shell -version)
-    set_tests_properties(CheckVersion PROPERTIES
+    set_tests_properties(SQLiteShellCheckVersion PROPERTIES
         PASS_REGULAR_EXPRESSION "${SQLite3_VERSION}")
 endif()
 
