@@ -1,5 +1,10 @@
 # Changelog
 
+## SQLite Release 3.38.2 On 2022-03-26
+
+1. Fix a user-discovered problem with the new Bloom filter optimization that might cause an incorrect answer when doing a LEFT JOIN with a WHERE clause constraint that says that one of the columns on the right table of the LEFT JOIN is NULL. See forum thread 031e262a89b6a9d2.
+2. Other minor patches. See the timeline for details.
+
 ## SQLite Release 3.38.1 On 2022-03-12
 
 1. Fix problems with the new Bloom filter optimization that might cause some obscure queries to get an incorrect answer.
