@@ -193,6 +193,11 @@ system if you need them.
   When this option is defined the JSON SQL functions are added to the build
   automatically.
 
+- `SQLITE_ENABLE_MATH_FUNCTIONS:BOOL`=**ON**:
+  value is a **boolean**.  
+  When this option is defined the built-in SQL math functions are added to the
+  build automatically.
+
 - `SQLITE_ENABLE_PREUPDATE_HOOK:BOOL`=**OFF**:
   value is a **boolean**.  
   When this option is defined the pre-update hook APIs is included in the build.
