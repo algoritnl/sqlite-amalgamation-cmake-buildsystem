@@ -1,5 +1,33 @@
 # Changelog
 
+## SQLite Release 3.35.0 On 2021-03-12
+
+1. Added built-in SQL math functions(). (Requires the -DSQLITE_ENABLE_MATH_FUNCTIONS compile-time option.)
+2. Added support for ALTER TABLE DROP COLUMN.
+3. Generalize UPSERT:
+    1. Allow multiple ON CONFLICT clauses that are evaluated in order,
+    2. The final ON CONFLICT clause may omit the conflict target and yet still use DO UPDATE.
+4. Add support for the RETURNING clause on DELETE, INSERT, and UPDATE statements.
+5. Use less memory when running VACUUM on databases containing very large TEXT or BLOB values. It is no longer necessary to hold the entire TEXT or BLOB in memory all at once.
+6. Add support for the MATERIALIZED and NOT MATERIALIZED hints when specifying common table expressions. The default behavior was formerly NOT MATERIALIZED, but is now changed to MATERIALIZED for CTEs that are used more than once.
+7. The SQLITE_DBCONFIG_ENABLE_TRIGGER and SQLITE_DBCONFIG_ENABLE_VIEW settings are modified so that they only control triggers and views in the main database schema or in attached database schemas and not in the TEMP schema. TEMP triggers and views are always allowed.
+8. Query planner/optimizer improvements:
+    1. Enhancements to the min/max optimization so that it works better with the IN operator and the OP_SeekScan optimization of the previous release.
+    2. Attempt to process EXISTS operators in the WHERE clause as if they were IN operators, in cases where this is a valid transformation and seems likely to improve performance.
+    3. Allow UNION ALL sub-queries to be flattened even if the parent query is a join.
+    4. Use an index, if appropriate, on IS NOT NULL expressions in the WHERE clause, even if STAT4 is disabled.
+    5. Expressions of the form "x IS NULL" or "x IS NOT NULL" might be converted to simply FALSE or TRUE, if "x" is a column that has a "NOT NULL" constraint and is not involved in an outer join.
+    6. Avoid checking foreign key constraints on an UPDATE statement if the UPDATE does not modify any columns associated with the foreign key.
+    7. Allow WHERE terms to be pushed down into sub-queries that contain window functions, as long as the WHERE term is made up of entirely of constants and copies of expressions found in the PARTITION BY clauses of all window functions in the sub-query.
+9. CLI enhancements:
+    1. Enhance the ".stats" command to accept new arguments "stmt" and "vmstep", causing prepare statement statistics and only the virtual-machine step count to be shown, respectively.
+    2. Add the ".filectrl data_version" command.
+    3. Enhance the ".once" and ".output" commands so that if the destination argument begins with "|" (indicating that output is redirected into a pipe) then the argument does not need to be quoted.
+10. Bug fixes:
+    1. Fix a potential NULL pointer dereference when processing a syntactically incorrect SELECT statement with a correlated WHERE clause and a "HAVING 0" clause. (Also fixed in the 3.34.1 patch release.)
+    2. Fix a bug in the IN-operator optimization of version 3.33.0 that can cause an incorrect answer.
+    3. Fix incorrect answers from the LIKE operator if the pattern ends with "%" and there is an "ESCAPE '_'" clause.
+
 ## SQLite Release 3.34.1 On 2021-01-20
 
 1. Fix a potential use-after-free bug when processing a a subquery with both a correlated WHERE clause and a "HAVING 0" clause and where the parent query is an aggregate.
