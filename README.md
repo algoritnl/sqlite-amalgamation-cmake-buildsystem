@@ -152,10 +152,6 @@ system if you need them.
   value is a **boolean**.  
   This option enables the dbstat virtual table.
 
-- `SQLITE_ENABLE_DESERIALIZE:BOOL`=**OFF**:
-  value is a **boolean**.  
-  This option enables the sqlite3_serialize() and sqlite3_deserialize() interfaces.
-
 - `SQLITE_ENABLE_EXPLAIN_COMMENTS:BOOL`=**OFF**:
   value is a **boolean**.  
   This option adds extra logic to SQLite that inserts comment text into the
@@ -217,6 +213,11 @@ system if you need them.
 - `SQLITE_ENABLE_STMTVTAB:BOOL`=**OFF**:
   value is a **boolean**.  
   This compile-time option enables the SQLITE_STMT virtual table logic.
+
+- `SQLITE_OMIT_DESERIALIZE:BOOL`=**OFF**:
+  value is a **boolean**.  
+  This option causes the sqlite3_serialize() and sqlite3_deserialize()
+  interfaces to be omitted from the build.
 
 - `SQLITE_OMIT_LOAD_EXTENSION:BOOL`=**OFF**:
   value is a **boolean**, recommended = **OFF**.  
