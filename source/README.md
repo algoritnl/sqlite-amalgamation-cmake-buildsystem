@@ -1,14 +1,14 @@
-Download: https://sqlite.org/2022/sqlite-amalgamation-3380300.zip
+Download: https://sqlite.org/2022/sqlite-amalgamation-3380400.zip
 
 ```
-Archive:  sqlite-amalgamation-3380300.zip
+Archive:  sqlite-amalgamation-3380400.zip
  Length   Method    Size  Cmpr    Date    Time   CRC-32   Name
 --------  ------  ------- ---- ---------- ----- --------  ----
-       0  Stored        0   0% 2022-04-27 15:59 00000000  sqlite-amalgamation-3380300/
- 8463917  Defl:N  2183581  74% 2022-04-27 15:59 9f12f31c  sqlite-amalgamation-3380300/sqlite3.c
-  725010  Defl:N   185132  75% 2022-04-27 15:59 bdfff0cd  sqlite-amalgamation-3380300/shell.c
-   36750  Defl:N     6408  83% 2022-04-27 15:59 11790a34  sqlite-amalgamation-3380300/sqlite3ext.h
-  611797  Defl:N   158394  74% 2022-04-27 15:59 6c9eb334  sqlite-amalgamation-3380300/sqlite3.h
+       0  Stored        0   0% 2022-05-04 18:09 00000000  sqlite-amalgamation-3380400/
+ 8464186  Defl:N  2183655  74% 2022-05-04 18:09 337c2e0d  sqlite-amalgamation-3380400/sqlite3.c
+  725227  Defl:N   185189  75% 2022-05-04 18:09 0e743594  sqlite-amalgamation-3380400/shell.c
+   36750  Defl:N     6408  83% 2022-05-04 18:09 11790a34  sqlite-amalgamation-3380400/sqlite3ext.h
+  611797  Defl:N   158393  74% 2022-05-04 18:09 f220078b  sqlite-amalgamation-3380400/sqlite3.h
 --------          -------  ---                            -------
- 9837474          2533515  74%                            5 files
+ 9837960          2533645  74%                            5 files
 ```
