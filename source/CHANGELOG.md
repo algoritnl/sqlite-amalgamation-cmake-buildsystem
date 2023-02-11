@@ -1,5 +1,16 @@
 # Changelog
 
+## SQLite Release 3.36.0 On 2021-06-18
+
+1. Improvement to the EXPLAIN QUERY PLAN output to make it easier to understand.
+2. Byte-order marks at the start of a token are skipped as if they were whitespace.
+3. An error is raised on any attempt to access the rowid of a VIEW or subquery. Formerly, the rowid of a VIEW would be indeterminate and often would be NULL. The -DSQLITE_ALLOW_ROWID_IN_VIEW compile-time option is available to restore the legacy behavior for applications that need it.
+4. The sqlite3_deserialize() and sqlite3_serialize() interfaces are now enabled by default. The -DSQLITE_ENABLE_DESERIALIZE compile-time option is no longer required. Instead, there is a new -DSQLITE_OMIT_DESERIALIZE compile-time option to omit those interfaces.
+5. The "memdb" VFS now allows the same in-memory database to be shared among multiple database connections in the same process as long as the database name begins with "/".
+6. Back out the EXISTS-to-IN optimization (item 8b in the SQLite 3.35.0 change log) as it was found to slow down queries more often than speed them up.
+7. Improve the constant-propagation optimization so that it works on non-join queries.
+8. The REGEXP extension is now included in CLI builds.
+
 ## SQLite Release 3.35.5 On 2021-04-19
 
 1. Fix defects in the new ALTER TABLE DROP COLUMN feature that could corrupt the database file.
