@@ -1,5 +1,11 @@
 # Changelog
 
+## SQLite Release 3.34.1 On 2021-01-20
+
+1. Fix a potential use-after-free bug when processing a a subquery with both a correlated WHERE clause and a "HAVING 0" clause and where the parent query is an aggregate.
+2. Fix documentation typos
+3. Fix minor problems in extensions.
+
 ## SQLite Release 3.34.0 On 2020-12-01
 
 1. Added the sqlite3_txn_state() interface for reporting on the current transaction state of the database connection.
