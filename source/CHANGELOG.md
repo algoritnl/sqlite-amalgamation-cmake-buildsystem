@@ -1,5 +1,12 @@
 # Changelog
 
+## SQLite Release 3.35.4 On 2021-04-02
+
+1. Fix a defect in the query planner optimization identified by item 8b above. Ticket de7db14784a08053.
+2. Fix a defect in the new RETURNING syntax. Ticket 132994c8b1063bfb.
+3. Fix the new RETURNING feature so that it raises an error if one of the terms in the RETURNING clause references a unknown table, instead of silently ignoring that error.
+4. Fix an assertion associated with aggregate function processing that was incorrectly triggered by the push-down optimization.
+
 ## SQLite Release 3.35.3 On 2021-03-26
 
 1. Enhance the OP_OpenDup opcode of the bytecode engine so that it works even if the cursor being duplicated itself came from OP_OpenDup. Fix for ticket bb8a9fd4a9b7fce5. This problem only came to light due to the recent MATERIALIZED hint enhancement.
