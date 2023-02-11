@@ -1,5 +1,11 @@
 # Changelog
 
+## SQLite Release 3.37.2 On 2022-01-06
+
+1. Fix a bug introduced in version 3.35.0 (2021-03-12) that can cause database corruption if a SAVEPOINT is rolled back while in PRAGMA temp_store=MEMORY mode, and other changes are made, and then the outer transaction commits. Check-in 73c2b50211d3ae26
+2. Fix a long-standing problem with ON DELETE CASCADE and ON UPDATE CASCADE in which a cache of the bytecode used to implement the cascading change was not being reset following a local DDL change. Check-in 5232c9777fe4fb13.
+3. Other minor fixes that should not impact production builds.
+
 ## SQLite Release 3.37.1 On 2021-12-30
 
 1. Fix a bug introduced by the UPSERT enhancements of version 3.35.0 that can cause incorrect byte-code to be generated for some obscure but valid SQL, possibly resulting in a NULL-pointer dereference.
