@@ -1,5 +1,12 @@
 # Changelog
 
+## SQLite Release 3.37.1 On 2021-12-30
+
+1. Fix a bug introduced by the UPSERT enhancements of version 3.35.0 that can cause incorrect byte-code to be generated for some obscure but valid SQL, possibly resulting in a NULL-pointer dereference.
+2. Fix an OOB read that can occur in FTS5 when reading corrupt database files.
+3. Improved robustness of the --safe option in the CLI.
+4. Other minor fixes to assert() statements and test cases.
+
 ## SQLite Release 3.37.0 On 2021-11-27
 
 1. STRICT tables provide a prescriptive style of data type management, for developers who prefer that kind of thing.
