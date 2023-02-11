@@ -1,5 +1,22 @@
 # Changelog
 
+## SQLite Release 3.37.0 On 2021-11-27
+
+1. STRICT tables provide a prescriptive style of data type management, for developers who prefer that kind of thing.
+2. When adding columns that contain a CHECK constraint or a generated column containing a NOT NULL constraint, the ALTER TABLE ADD COLUMN now checks new constraints against preexisting rows in the database and will only proceed if no constraints are violated.
+3. Added the PRAGMA table_list statement.
+4. CLI enhancements:
+    1. Add the .connection command, allowing the CLI to keep multiple database connections open at the same time.
+    2. Add the --safe command-line option that disables dot-commands and SQL statements that might cause side-effects that extend beyond the single database file named on the command-line.
+    3. Performance improvements when reading SQL statements that span many lines.
+5. Added the sqlite3_autovacuum_pages() interface.
+6. The sqlite3_deserialize() does not and has never worked for the TEMP database. That limitation is now noted in the documentation.
+7. The query planner now omits ORDER BY clauses on subqueries and views if removing those clauses does not change the semantics of the query.
+8. The generate_series table-valued function extension is modified so that the first parameter ("START") is now required. This is done as a way to demonstrate how to write table-valued functions with required parameters. The legacy behavior is available using the -DZERO_ARGUMENT_GENERATE_SERIES compile-time option.
+9. Added new sqlite3_changes64() and sqlite3_total_changes64() interfaces.
+10. Added the SQLITE_OPEN_EXRESCODE flag option to sqlite3_open_v2().
+11. Use less memory to hold the database schema.
+
 ## SQLite Release 3.36.0 On 2021-06-18
 
 1. Improvement to the EXPLAIN QUERY PLAN output to make it easier to understand.
