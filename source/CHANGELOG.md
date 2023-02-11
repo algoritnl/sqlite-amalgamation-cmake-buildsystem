@@ -1,5 +1,10 @@
 # Changelog
 
+## SQLite Release 3.35.5 On 2021-04-19
+
+1. Fix defects in the new ALTER TABLE DROP COLUMN feature that could corrupt the database file.
+2. Fix an obscure query optimizer problem that might cause an incorrect query result.
+
 ## SQLite Release 3.35.4 On 2021-04-02
 
 1. Fix a defect in the query planner optimization identified by item 8b above. Ticket de7db14784a08053.
