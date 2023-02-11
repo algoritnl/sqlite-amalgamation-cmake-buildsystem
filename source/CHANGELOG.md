@@ -1,5 +1,10 @@
 # Changelog
 
+## SQLite Release 3.35.1 On 2021-03-15
+
+1. Fix a bug in the new DROP COLUMN feature when used on columns that are indexed and that are quoted in the index definition.
+2. Improve the built-in documentation for the .dump command in the CLI.
+
 ## SQLite Release 3.35.0 On 2021-03-12
 
 1. Added built-in SQL math functions(). (Requires the -DSQLITE_ENABLE_MATH_FUNCTIONS compile-time option.)
