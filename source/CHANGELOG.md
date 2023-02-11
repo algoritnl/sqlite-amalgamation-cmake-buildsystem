@@ -1,5 +1,12 @@
 # Changelog
 
+## SQLite Release 3.35.2 On 2021-03-17
+
+1. Fix a problem in the appendvfs.c extension that was introduced into version 3.35.0.
+2. Ensure that date/time functions with no arguments (which generate responses that depend on the current time) are treated as non-deterministic functions. Ticket 2c6c8689fb5f3d2f
+3. Fix a problem in the sqldiff utility program having to do with unusual whitespace characters in a virtual table definition.
+4. Limit the new UNION ALL optimization described by item 8c in the 3.35.0 release so that it does not try to make too many new subqueries. See forum thread 140a67d3d2 for details.
+
 ## SQLite Release 3.35.1 On 2021-03-15
 
 1. Fix a bug in the new DROP COLUMN feature when used on columns that are indexed and that are quoted in the index definition.
