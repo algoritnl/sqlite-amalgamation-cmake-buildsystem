@@ -1,5 +1,9 @@
 # Changelog
 
+## SQLite Release 3.38.5 On 2022-05-06
+
+1. Fix a blunder in the CLI of the 3.38.4 release.
+
 ## SQLite Release 3.38.4 On 2022-05-04
 
 1. Fix a byte-code problem in the Bloom filter pull-down optimization added by release 3.38.0 in which an error in the byte code causes the byte code engine to enter an infinite loop when the pull-down optimization encounters a NULL key. Forum thread 2482b32700384a0f.
