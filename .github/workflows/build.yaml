@@ -1,78 +1,35 @@
 name: Build
 
-on: [push, pull_request]
-
-env:
-  BUILD_TYPE: Release
+on:
+  push:
+    branches: [ 'release/**', 'feature/**' ]
+  pull_request:
+    branches: [ 'main' ]
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        config: [Debug, Release]
+
+    runs-on: ${{matrix.os}}
 
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Set up build environment
-        run: cmake -E make_directory ${{runner.workspace}}/build
+    - name: Generate build system
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE:STRING=${{matrix.config}}
+                 -DBUILD_SHARED_LIBS:BOOL=ON -DBUILD_TESTING:BOOL=ON
 
-      - name: Generate build system
-        working-directory: ${{runner.workspace}}/build
-        run: cmake $GITHUB_WORKSPACE
-                   -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
-                   -DBUILD_SHARED_LIBS:BOOL=ON
-                   -DBUILD_TESTING:BOOL=ON
+    - name: Build targets
+      run: cmake --build ${{github.workspace}}/build --config ${{matrix.config}}
 
-      - name: Build targets
-        working-directory: ${{runner.workspace}}/build
-        run: cmake --build .
+    - name: Perform tests
+      working-directory: ${{github.workspace}}/build
+      run: ctest -C ${{matrix.config}} -V
 
-      - name: Perform tests
-        working-directory: ${{runner.workspace}}/build
-        run: ctest -C $BUILD_TYPE -V
-
-  build-macos:
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up build environment
-        run: cmake -E make_directory ${{runner.workspace}}/build
-
-      - name: Generate build system
-        working-directory: ${{runner.workspace}}/build
-        run: cmake $GITHUB_WORKSPACE
-                   -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE
-                   -DBUILD_SHARED_LIBS:BOOL=ON
-                   -DBUILD_TESTING:BOOL=ON
-
-      - name: Build targets
-        working-directory: ${{runner.workspace}}/build
-        run: cmake --build .
-
-      - name: Perform tests
-        working-directory: ${{runner.workspace}}/build
-        run: ctest -C $BUILD_TYPE -V
-
-  build-windows:
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up build environment
-        run: cmake -E make_directory ${{runner.workspace}}\build
-
-      - name: Generate build system
-        working-directory: ${{runner.workspace}}\build
-        run: cmake ${env:GITHUB_WORKSPACE}
-                   -DBUILD_SHARED_LIBS:BOOL=ON
-                   -DBUILD_TESTING:BOOL=ON
-
-      - name: Build targets
-        working-directory: ${{runner.workspace}}\build
-        run: cmake --build . --config ${env:BUILD_TYPE}
-
-      - name: Perform tests
-        working-directory: ${{runner.workspace}}\build
-        run: ctest -C ${env:BUILD_TYPE} -V
+    - name: Create package
+      working-directory: ${{github.workspace}}/build
+      run: cpack -C ${{matrix.config}} -G ZIP -V
