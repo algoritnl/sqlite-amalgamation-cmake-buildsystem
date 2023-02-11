@@ -1,5 +1,13 @@
 # Changelog
 
+## SQLite Release 3.38.1 On 2022-03-12
+
+1. Fix problems with the new Bloom filter optimization that might cause some obscure queries to get an incorrect answer.
+2. Fix the localtime modifier of the date and time functions so that it preserves fractional seconds.
+3. Fix the sqlite_offset SQL function so that it works correctly even in corner cases such as when the argument is a virtual column or the column of a view.
+4. Fix row value IN operator constraints on virtual tables so that they work correctly even if the virtual table implementation relies on bytecode to filter rows that do not satisfy the constraint.
+5. Other minor fixes to assert() statements, test cases, and documentation. See the source code timeline for details.
+
 ## SQLite Release 3.38.0 On 2022-02-22
 
 1. Added the -> and ->> operators for easier processing of JSON. The new operators are compatible with MySQL and PostgreSQL.
