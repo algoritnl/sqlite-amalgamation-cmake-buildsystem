@@ -1,5 +1,30 @@
 # Changelog
 
+## SQLite Release 3.38.0 On 2022-02-22
+
+1. Added the -> and ->> operators for easier processing of JSON. The new operators are compatible with MySQL and PostgreSQL.
+2. The JSON functions are now built-ins. It is no longer necessary to use the -DSQLITE_ENABLE_JSON1 compile-time option to enable JSON support. JSON is on by default. Disable the JSON interface using the new -DSQLITE_OMIT_JSON compile-time option.
+3. Enhancements to date and time functions:
+    1. Added the unixepoch() function.
+    2. Added the auto modifier and the julianday modifier.
+4. Rename the printf() SQL function to format() for better compatibility. The original printf() name is retained as an alias for backwards compatibility.
+5. Added the sqlite3_error_offset() interface, which can sometimes help to localize an SQL error to a specific character in the input SQL text, so that applications can provide better error messages.
+6. Enhanced the interface to virtual tables as follows:
+    1. Added the sqlite3_vtab_distinct() interface.
+    2. Added the sqlite3_vtab_rhs_value() interface.
+    3. Added new operator types SQLITE_INDEX_CONSTRAINT_LIMIT and SQLITE_INDEX_CONSTRAINT_OFFSET.
+    4. Added the sqlite3_vtab_in() interface (and related) to enable a virtual table to process IN operator constraints all at once, rather than processing each value of the right-hand side of the IN operator separately.
+7. CLI enhancements:
+    1. Columnar output modes are enhanced to correctly handle tabs and newlines embedded in text.
+    2. Added options like "--wrap N", "--wordwrap on", and "--quote" to the columnar output modes.
+    3. Added the .mode qbox alias.
+    4. The .import command automatically disambiguates column names.
+    5. Use the new sqlite3_error_offset() interface to provide better error messages.
+8. Query planner enhancements:
+    1. Use a Bloom filter to speed up large analytic queries.
+    2. Use a balanced merge tree to evaluate UNION or UNION ALL compound SELECT statements that have an ORDER BY clause.
+9. The ALTER TABLE statement is changed to silently ignores entries in the sqlite_schema table that do not parse when PRAGMA writable_schema=ON.
+
 ## SQLite Release 3.37.2 On 2022-01-06
 
 1. Fix a bug introduced in version 3.35.0 (2021-03-12) that can cause database corruption if a SAVEPOINT is rolled back while in PRAGMA temp_store=MEMORY mode, and other changes are made, and then the outer transaction commits. Check-in 73c2b50211d3ae26

@@ -72,7 +72,6 @@ option(SQLITE_ENABLE_FTS4 "Enable versions 3 and 4 of the full-text search engin
 option(SQLITE_ENABLE_FTS5 "Enable version 5 of the full-text search engine." OFF)
 option(SQLITE_ENABLE_GEOPOLY "Enable the Geopoly extension." OFF)
 option(SQLITE_ENABLE_ICU "Enable the ICU (International Components for Unicode) extension" OFF)
-option(SQLITE_ENABLE_JSON1 "Enable the JSON SQL functions." OFF)
 option(SQLITE_ENABLE_MATH_FUNCTIONS "Enable the built-in SQL math functions." ON)
 option(SQLITE_ENABLE_PREUPDATE_HOOK "Enable the pre-update hook feature." OFF)
 option(SQLITE_ENABLE_RBU "Enable the code that implements the RBU extension." OFF)
@@ -87,6 +86,7 @@ option(SQLITE_OMIT_COMPILEOPTION_DIAGS "Omit compile option interfaces." OFF)
 option(SQLITE_OMIT_DECLTYPE "Omit the ability to return the declared type of columns from queries." OFF)
 option(SQLITE_OMIT_DEPRECATED "Omit deprecated interfaces and features." OFF)
 option(SQLITE_OMIT_DESERIALIZE "Omit sqlite3_serialize() and sqlite3_deserialize() interfaces." OFF)
+option(SQLITE_OMIT_JSON "Omit the JSON SQL functions." OFF)
 option(SQLITE_OMIT_LOAD_EXTENSION "Omit the extension loading mechanism." OFF)
 option(SQLITE_OMIT_PROGRESS_CALLBACK "Omit the capability to issue progress callbacks." OFF)
 option(SQLITE_OMIT_SHARED_CACHE "Omit support for shared-cache mode." OFF)
@@ -227,7 +227,6 @@ target_compile_definitions(SQLite3
         $<$<BOOL:${SQLITE_ENABLE_FTS5}>:SQLITE_ENABLE_FTS5>
         $<$<BOOL:${SQLITE_ENABLE_GEOPOLY}>:SQLITE_ENABLE_GEOPOLY>
         $<$<BOOL:${SQLITE_ENABLE_ICU}>:SQLITE_ENABLE_ICU>
-        $<$<BOOL:${SQLITE_ENABLE_JSON1}>:SQLITE_ENABLE_JSON1>
         $<$<BOOL:${SQLITE_ENABLE_MATH_FUNCTIONS}>:SQLITE_ENABLE_MATH_FUNCTIONS>
         $<$<BOOL:${SQLITE_ENABLE_RBU}>:SQLITE_ENABLE_RBU>
         $<$<BOOL:${SQLITE_ENABLE_RTREE}>:SQLITE_ENABLE_RTREE>
@@ -236,6 +235,7 @@ target_compile_definitions(SQLite3
         $<$<BOOL:${SQLITE_OMIT_AUTOINIT}>:SQLITE_OMIT_AUTOINIT>
         $<$<BOOL:${SQLITE_OMIT_DECLTYPE}>:SQLITE_OMIT_DECLTYPE>
         $<$<BOOL:${SQLITE_OMIT_DESERIALIZE}>:SQLITE_OMIT_DESERIALIZE>
+        $<$<BOOL:${SQLITE_OMIT_JSON}>:SQLITE_OMIT_JSON>
         $<$<BOOL:${SQLITE_OMIT_PROGRESS_CALLBACK}>:SQLITE_OMIT_PROGRESS_CALLBACK>
         $<$<BOOL:${SQLITE_OMIT_SHARED_CACHE}>:SQLITE_OMIT_SHARED_CACHE>
         $<$<BOOL:${SQLITE_USE_ALLOCA}>:SQLITE_USE_ALLOCA>)

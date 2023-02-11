@@ -184,11 +184,6 @@ system if you need them.
   This option causes the International Components for Unicode or "ICU" extension
   to SQLite to be added to the build.
 
-- `SQLITE_ENABLE_JSON1:BOOL`=**OFF**:
-  value is a **boolean**.  
-  When this option is defined the JSON SQL functions are added to the build
-  automatically.
-
 - `SQLITE_ENABLE_MATH_FUNCTIONS:BOOL`=**ON**:
   value is a **boolean**.  
   When this option is defined the built-in SQL math functions are added to the
@@ -218,6 +213,11 @@ system if you need them.
   value is a **boolean**.  
   This option causes the sqlite3_serialize() and sqlite3_deserialize()
   interfaces to be omitted from the build.
+
+- `SQLITE_OMIT_JSON:BOOL`=**OFF**:
+  value is a **boolean**.  
+  When this option is defined the JSON SQL functions are omitted from the
+  build.
 
 - `SQLITE_OMIT_LOAD_EXTENSION:BOOL`=**OFF**:
   value is a **boolean**, recommended = **OFF**.  
