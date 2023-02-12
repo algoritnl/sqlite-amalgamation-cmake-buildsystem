@@ -1,5 +1,16 @@
 # Changelog
 
+## SQLite Release 3.39.0 On 2022-06-25
+
+1. Add (long overdue) support for RIGHT and FULL OUTER JOIN.
+2. Add new binary comparison operators IS NOT DISTINCT FROM and IS DISTINCT FROM that are equivalent to IS and IS NOT, respective, for compatibility with PostgreSQL and SQL standards.
+3. Add a new return code (value "3") from the sqlite3_vtab_distinct() interface that indicates a query that has both DISTINCT and ORDER BY clauses.
+4. Added the sqlite3_db_name() interface.
+5. The unix os interface resolves all symbolic links in database filenames to create a canonical name for the database before the file is opened. If the SQLITE_OPEN_NOFOLLOW flag is used with sqlite3_open_v2() or similar, the open will fail if any element of the path is a symbolic link.
+6. Defer materializing views until the materialization is actually needed, thus avoiding unnecessary work if the materialization turns out to never be used.
+7. The HAVING clause of a SELECT statement is now allowed on any aggregate query, even queries that do not have a GROUP BY clause.
+8. Many microoptimizations collectively reduce CPU cycles by about 2.3%.
+
 ## SQLite Release 3.38.5 On 2022-05-06
 
 1. Fix a blunder in the CLI of the 3.38.4 release.
