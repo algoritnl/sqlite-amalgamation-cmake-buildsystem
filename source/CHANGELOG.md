@@ -1,5 +1,11 @@
 # Changelog
 
+## SQLite Release 3.39.3 On 2022-09-05
+
+1. Use a statement journal on DML statement affecting two or more database rows if the statement makes use of a SQL functions that might abort. See forum thread 9b9e4716c0d7bbd1.
+2. Use a mutex to protect the PRAGMA temp_store_directory and PRAGMA data_store_directory statements, even though they are deprecated and documented as not being threadsafe. See forum post 719a11e1314d1c70.
+3. Other bug and warning fixes. See the timeline for details.
+
 ## SQLite Release 3.39.2 On 2022-07-21
 
 1. Fix a performance regression in the query planner associated with rearranging the order of FROM clause terms in the presences of a LEFT JOIN.
