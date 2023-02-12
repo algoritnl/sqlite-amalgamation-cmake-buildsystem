@@ -94,9 +94,12 @@ system if you need them.
   LIKE optimization to run faster.
 
 - `SQLITE_MAX_EXPR_DEPTH:STRING`=**0**:
-  value is an **integer**, default = **1000**.  
+  value is an **integer**, default = **-1**.  
   This option determines the maximum expression tree depth. If the value is
   **0**, then no limit is enforced. The recommended value is **0** (no limit).
+
+  *Special value **-1** does not get passed to the build generator,
+  so that the source code uses its own default.*
 
 - `SQLITE_ENABLE_COLUMN_METADATA:BOOL`=**OFF**:
   value is a **boolean**, default = **OFF**.  
@@ -208,6 +211,14 @@ system if you need them.
 - `SQLITE_ENABLE_STMTVTAB:BOOL`=**OFF**:
   value is a **boolean**.  
   This compile-time option enables the SQLITE_STMT virtual table logic.
+
+- `SQLITE_MAX_ALLOCATION_SIZE:STRING`=**-1**:
+  value is an **integer**.  
+  This option sets an upper bound on the size of memory allocations that can be
+  requested using sqlite3_malloc64(), sqlite3_realloc64(), and similar.
+
+  *Special value **-1** does not get passed to the build generator,
+  so that the source code uses its own default.*
 
 - `SQLITE_OMIT_DESERIALIZE:BOOL`=**OFF**:
   value is a **boolean**.  

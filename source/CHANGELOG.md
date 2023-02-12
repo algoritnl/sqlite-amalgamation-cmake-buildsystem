@@ -1,5 +1,29 @@
 # Changelog
 
+## SQLite Release 3.40.0 On 2022-11-16
+
+1. Add support for compiling SQLite to WASM and running it in web browsers. NB: The WASM build and its interfaces are considered "beta" and are subject to minor changes if the need arises. We anticipate finalizing the interface for the next release.
+2. Add the recovery extension that might be able to recover some content from a corrupt database file.
+3. Query planner enhancements:
+    1. Recognize covering indexes on tables with more than 63 columns where columns beyond the 63rd column are used in the query and/or are referenced by the index.
+    2. Extract the values of expressions contained within expression indexes where practical, rather than recomputing the expression.
+    3. The NOT NULL and IS NULL operators (and their equivalents) avoid loading the content of large strings and BLOB values from disk.
+    4. Avoid materializing a view on which a full scan is performed exactly once. Use and discard the rows of the view as they are computed.
+    5. Allow flattening of a subquery that is the right-hand operand of a LEFT JOIN in an aggregate query.
+4. A new typedef named sqlite3_filename is added and used to represent the name of a database file. Various interfaces are modified to use the new typedef instead of "char*". This interface change should be fully backwards compatible, though it might cause (harmless) compiler warnings when rebuilding some legacy applications.
+5. Add the sqlite3_value_encoding() interface.
+6. Security enhancement: SQLITE_DBCONFIG_DEFENSIVE is augmented to prohibit changing the schema_version. The schema_version becomes read-only in defensive mode.
+7. Enhancements to the PRAGMA integrity_check statement:
+    1. Columns in non-STRICT tables with TEXT affinity should not contain numeric values.
+    2. Columns in non-STRICT tables with NUMERIC affinity should not contain TEXT values that could be converted into numbers.
+    3. Verify that the rows of a WITHOUT ROWID table are in the correct order.
+8. Enhance the VACUUM INTO statement so that it honors the PRAGMA synchronous setting.
+9. Enhance the sqlite3_strglob() and sqlite3_strlike() APIs so that they are able to accept NULL pointers for their string parameters and still generate a sensible result.
+10. Provide the new SQLITE_MAX_ALLOCATION_SIZE compile-time option for limiting the size of memory allocations.
+11. Change the algorithm used by SQLite's built-in pseudo-random number generator (PRNG) from RC4 to Chacha20.
+12. Allow two or more indexes to have the same name as long as they are all in separate schemas.
+13. Miscellaneous performance optimizations result in about 1% fewer CPU cycles used on typical workloads.
+
 ## SQLite Release 3.39.4 On 2022-09-29
 
 1. Fix the build on Windows so that it works with -DSQLITE_OMIT_AUTOINIT
