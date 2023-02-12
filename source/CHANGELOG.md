@@ -1,5 +1,15 @@
 # Changelog
 
+## SQLite Release 3.39.1 On 2022-07-13
+
+1. Fix an incorrect result from a query that uses a view that contains a compound SELECT in which only one arm contains a RIGHT JOIN and where the view is not the first FROM clause term of the query that contains the view. forum post 174afeae5734d42d.
+2. Fix some harmless compiler warnings.
+3. Fix a long-standing problem with ALTER TABLE RENAME that can only arise if the sqlite3_limit(SQLITE_LIMIT_SQL_LENGTH) is set to a very small value.
+4. Fix a long-standing problem in FTS3 that can only arise when compiled with the SQLITE_ENABLE_FTS3_PARENTHESIS compile-time option.
+5. Fix the build so that is works when the SQLITE_DEBUG and SQLITE_OMIT_WINDOWFUNC compile-time options are both provided at the same time.
+6. Fix the initial-prefix optimization for the REGEXP extension so that it works correctly even if the prefix contains characters that require a 3-byte UTF8 encoding.
+7. Enhance the sqlite_stmt virtual table so that it buffers all of its output.
+
 ## SQLite Release 3.39.0 On 2022-06-25
 
 1. Add (long overdue) support for RIGHT and FULL OUTER JOIN.
