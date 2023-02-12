@@ -1,5 +1,13 @@
 # Changelog
 
+## SQLite Release 3.39.4 On 2022-09-29
+
+1. Fix the build on Windows so that it works with -DSQLITE_OMIT_AUTOINIT
+2. Fix a long-standing problem in the btree balancer that might, in rare cases, cause database corruption if the application uses an application-defined page cache.
+3. Enhance SQLITE_DBCONFIG_DEFENSIVE so that it disallows CREATE TRIGGER statements if one or more of the statements in the body of the trigger write into shadow tables.
+4. Fix a possible integer overflow in the size computation for a memory allocation in FTS3.
+5. Fix a misuse of the sqlite3_set_auxdata() interface in the ICU Extension.
+
 ## SQLite Release 3.39.3 On 2022-09-05
 
 1. Use a statement journal on DML statement affecting two or more database rows if the statement makes use of a SQL functions that might abort. See forum thread 9b9e4716c0d7bbd1.
