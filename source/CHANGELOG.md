@@ -1,5 +1,10 @@
 # Changelog
 
+## SQLite Release 3.39.2 On 2022-07-21
+
+1. Fix a performance regression in the query planner associated with rearranging the order of FROM clause terms in the presences of a LEFT JOIN.
+2. Apply fixes for CVE-2022-35737, Chromium bugs 1343348 and 1345947, forum post 3607259d3c, and other minor problems discovered by internal testing.
+
 ## SQLite Release 3.39.1 On 2022-07-13
 
 1. Fix an incorrect result from a query that uses a view that contains a compound SELECT in which only one arm contains a RIGHT JOIN and where the view is not the first FROM clause term of the query that contains the view. forum post 174afeae5734d42d.
