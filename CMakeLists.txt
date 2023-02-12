@@ -60,7 +60,8 @@ choice(SQLITE_DQS "Enable DQS: 0 = None (recommended); 1 = DML; 2 = DDL; 3 = Bot
 choice(SQLITE_THREADSAFE "Select the thread model: 0 = single-threaded; 1 = serialized (default); 2 = multi-threaded."
     VALID_VALUES 0 1 2 DEFAULT 1 FATAL_ERROR)
 
-set(SQLITE_MAX_EXPR_DEPTH 1000 CACHE STRING "Set the maximum expression tree depth.")
+set(SQLITE_MAX_ALLOCATION_SIZE -1 CACHE STRING "Set an upper bound on the size of memory allocations.")
+set(SQLITE_MAX_EXPR_DEPTH -1 CACHE STRING "Set the maximum expression tree depth.")
 
 option(SQLITE_ENABLE_API_ARMOR "This option activates extra code that attempts to detect misuse of the SQLite API." OFF)
 option(SQLITE_ENABLE_COLUMN_METADATA "Enable some extra APIs that are required by some common systems, including Ruby-on-Rails." OFF)
@@ -101,7 +102,11 @@ if(SQLITE_ENABLE_SESSION AND NOT SQLITE_ENABLE_PREUPDATE_HOOK)
     message(SEND_ERROR "Option SQLITE_ENABLE_SESSION requires option SQLITE_ENABLE_PREUPDATE_HOOK.")
 endif()
 
-if(NOT SQLITE_MAX_EXPR_DEPTH GREATER_EQUAL 0)
+if(NOT SQLITE_MAX_ALLOCATION_SIZE GREATER_EQUAL -1)
+    message(SEND_ERROR "Configuration SQLITE_MAX_ALLOCATION_SIZE=${SQLITE_MAX_ALLOCATION_SIZE} is not valid.")
+endif()
+
+if(NOT SQLITE_MAX_EXPR_DEPTH GREATER_EQUAL -1)
     message(SEND_ERROR "Configuration SQLITE_MAX_EXPR_DEPTH=${SQLITE_MAX_EXPR_DEPTH} is not valid.")
 endif()
 
@@ -215,8 +220,9 @@ target_compile_definitions(SQLite3
         SQLITE_DEFAULT_SYNCHRONOUS=${SQLITE_DEFAULT_SYNCHRONOUS}
         SQLITE_DEFAULT_WAL_SYNCHRONOUS=${SQLITE_DEFAULT_WAL_SYNCHRONOUS}
         SQLITE_DQS=${SQLITE_DQS}
-        SQLITE_MAX_EXPR_DEPTH=${SQLITE_MAX_EXPR_DEPTH}
         SQLITE_THREADSAFE=${SQLITE_THREADSAFE}
+        $<$<NOT:$<STREQUAL:${SQLITE_MAX_ALLOCATION_SIZE},-1>>:SQLITE_MAX_ALLOCATION_SIZE=${SQLITE_MAX_ALLOCATION_SIZE}>
+        $<$<NOT:$<STREQUAL:${SQLITE_MAX_EXPR_DEPTH},-1>>:SQLITE_MAX_EXPR_DEPTH=${SQLITE_MAX_EXPR_DEPTH}>
         $<$<BOOL:${SQLITE_ENABLE_API_ARMOR}>:SQLITE_ENABLE_API_ARMOR>
         $<$<BOOL:${SQLITE_ENABLE_COLUMN_METADATA}>:SQLITE_ENABLE_COLUMN_METADATA>
         $<$<BOOL:${SQLITE_ENABLE_DBSTAT_VTAB}>:SQLITE_ENABLE_DBSTAT_VTAB>
