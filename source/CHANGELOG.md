@@ -1,5 +1,11 @@
 # Changelog
 
+## SQLite Release 3.40.1 On 2022-12-28
+
+1. Fix the --safe command-line option to the CLI such that it correctly disallows the use of SQL functions like writefile() that can cause harmful side-effects.
+2. Fix a potential infinite loop in the memsys5 alternative memory allocator. This bug was introduced by a performance optimization in version 3.39.0.
+3. Various other obscure fixes.
+
 ## SQLite Release 3.40.0 On 2022-11-16
 
 1. Add support for compiling SQLite to WASM and running it in web browsers. NB: The WASM build and its interfaces are considered "beta" and are subject to minor changes if the need arises. We anticipate finalizing the interface for the next release.
