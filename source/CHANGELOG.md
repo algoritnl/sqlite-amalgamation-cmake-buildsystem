@@ -1,5 +1,36 @@
 # Changelog
 
+## SQLite Release 3.41.0 On 2023-02-21
+
+1. Query planner improvements:
+    1. Make use of indexed expressions within an aggregate query that includes a GROUP BY clause.
+    2. The query planner has improved awareness of when an index is a covering index and adjusts predicted runtimes accordingly.
+    3. The query planner is more aggressive about using co-routines rather than materializing subqueries and views.
+    4. Queries against the built-in table-valued functions json_tree() and json_each() will now usually treat "ORDER BY rowid" as a no-op.
+    5. Enhance the ability of the query planner to use indexed expressions even if the expression has been modified by the constant-propagation optimization. (See forum thread 0a539c7.)
+2. Add the built-in unhex() SQL function.
+3. Add the base64 and base85 application-defined functions as an extension and include that extension in the CLI.
+4. Add the sqlite3_stmt_scanstatus_v2() interface. (This interface is only available if SQLite is compiled using SQLITE_ENABLE_STMT_SCANSTATUS.)
+5. In-memory databases created using sqlite3_deserialize() now report their filename as an empty string, not as 'x'.
+6. Changes to the CLI:
+    1. Add the new base64() and base85() SQL functions
+    2. Enhanced EXPLAIN QUERY PLAN output using the new sqlite3_stmt_scanstatus_v2() interface when compiled using SQLITE_ENABLE_STMT_SCANSTATUS.
+    3. The ".scanstats est" command provides query planner estimates in profiles.
+    4. The continuation prompt indicates if the input is currently inside of a string literal, identifier literal, comment, trigger definition, etc.
+    5. Enhance the --safe command-line option to disallow dangerous SQL functions.
+    6. The double-quoted string misfeature is now disabled by default for CLI builds. Legacy use cases can reenable the misfeature at run-time using the ".dbconfig dqs_dml on" and ".dbconfig dqs_ddl on" commands.
+7. Enhance the PRAGMA integrity_check command so that it detects when text strings in a table are equivalent to but not byte-for-byte identical to the same strings in the index.
+8. Enhance the carray table-valued function so that it is able to bind an array of BLOB objects.
+9. Added the sqlite3_is_interrupted() interface.
+10.  Long-running calls to sqlite3_prepare() and similar now invoke the progress handler callback and react to sqlite3_interrupt().
+11. The sqlite3_vtab_in_first() and sqlite3_vtab_in_next() functions are enhanced so that they reliably detect if they are invoked on a parameter that was not selected for multi-value IN processing using sqlite3_vtab_in(). They return SQLITE_ERROR instead of SQLITE_MISUSE in this case.
+12. The parser now ignores excess parentheses around a subquery on the right-hand side of an IN operator, so that SQLite now works the same as PostgreSQL in this regard. Formerly, SQLite treated the subquery as an expression with an implied "LIMIT 1".
+13. Added the SQLITE_FCNTL_RESET_CACHE option to the sqlite3_file_control() API.
+14. Makefile improvements:
+    1. The new makefile target "sqlite3r.c" builds an amalgamation that includes the recovery extension.
+    2. New makefile targets "devtest" and "releasetest" for running a quick developmental test prior to doing a check-in and for doing a full release test, respectively.
+15. Miscellaneous performance enhancements.
+
 ## SQLite Release 3.40.1 On 2022-12-28
 
 1. Fix the --safe command-line option to the CLI such that it correctly disallows the use of SQL functions like writefile() that can cause harmful side-effects.

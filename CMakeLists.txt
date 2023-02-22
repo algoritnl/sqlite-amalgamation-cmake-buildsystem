@@ -25,7 +25,7 @@ unset(_ver_line)
 project(SQLite3
     VERSION ${SQLITE_VERSION}
     DESCRIPTION "SQLite: an embedded SQL database engine"
-    HOMEPAGE_URL https://github.com/algoritnl/sqlite-amalgamation
+    HOMEPAGE_URL https://github.com/algoritnl/sqlite-amalgamation-cmake-buildsystem
     LANGUAGES C)
 
 # -- Configuration -------------------------------------------------------------
