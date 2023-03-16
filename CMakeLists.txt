@@ -112,6 +112,11 @@ endif()
 
 # -- Introspection -------------------------------------------------------------
 
+if(CMAKE_C_COMPILER_ID MATCHES "(GNU|Clang)")
+    list(APPEND CMAKE_REQUIRED_DEFINITIONS -D_GNU_SOURCE)
+    list(APPEND CMAKE_REQUIRED_LIBRARIES m)
+endif()
+
 include(CheckIncludeFile)
 include(CheckSymbolExists)
 include(CheckTypeSize)
@@ -131,6 +136,8 @@ check_include_file(malloc.h HAVE_MALLOC_H)
 check_symbol_exists(malloc_usable_size malloc.h HAVE_MALLOC_USABLE_SIZE)
 
 check_symbol_exists(isnan math.h HAVE_ISNAN)
+check_symbol_exists(log2 math.h HAVE_LOG2)
+check_symbol_exists(log10 math.h HAVE_LOG10)
 
 check_symbol_exists(strchrnul string.h HAVE_STRCHRNUL)
 check_symbol_exists(strerror_r string.h HAVE_STRERROR_R)
@@ -257,6 +264,8 @@ target_compile_definitions(SQLite3
         $<$<BOOL:${HAVE_ISNAN}>:HAVE_ISNAN>
         $<$<BOOL:${HAVE_LOCALTIME_R}>:HAVE_LOCALTIME_R>
         $<$<BOOL:${HAVE_LOCALTIME_S}>:HAVE_LOCALTIME_S>
+        HAVE_LOG2=$<BOOL:${HAVE_LOG2}>
+        HAVE_LOG10=$<BOOL:${HAVE_LOG10}>
         $<$<BOOL:${HAVE_LSTAT}>:HAVE_LSTAT>
         $<$<BOOL:${HAVE_MALLOC_H}>:HAVE_MALLOC_H>
         $<$<BOOL:${HAVE_MALLOC_USABLE_SIZE}>:HAVE_MALLOC_USABLE_SIZE>
