@@ -1,5 +1,12 @@
 # Changelog
 
+## SQLite Release 3.41.1 On 2023-03-10
+
+1. Provide compile-time options -DHAVE_LOG2=0 and -DHAVE_LOG10=0 to enable SQLite to be compiled on systems that omit the standard library functions log2() and log10(), repectively.
+2. Ensure that the datatype for column t1.x in "CREATE TABLE t1 AS SELECT CAST(7 AS INT) AS x;" continues to be INT and is not NUM, for historical compatibility.
+3. Enhance PRAGMA integrity_check to detect when extra bytes appear at the end of an index record.
+4. Fix various obscure bugs reported by the user community. See the timeline of changes for details.
+
 ## SQLite Release 3.41.0 On 2023-02-21
 
 1. Query planner improvements:
