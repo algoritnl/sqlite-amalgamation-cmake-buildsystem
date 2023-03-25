@@ -1,5 +1,18 @@
 # Changelog
 
+## SQLite Release 3.41.2 On 2023-03-22
+
+1. Multiple fixes for reads past the end of memory buffers (NB: reads not writes) in the following circumstances:
+    1. When processing a corrupt database file using the non-standard SQLITE_ENABLE_STAT4 compile-time option.
+    2. In the CLI when the sqlite3_error_offset() routine returns an out-of-range value (see also the fix to sqlite3_error_offset() below).
+    3. In the recovery extension.
+    4. In FTS3 when processing a corrupt database file.
+2. Fix the sqlite3_error_offset() so that it does not return out-of-range values when reporting errors associated with generated columns.
+3. Multiple fixes in the query optimizer for problems that cause incorrect results for bizarre, fuzzer-generated queries.
+4. Increase the size of the reference counter in the page cache object to 64 bits to ensure that the counter never overflows.
+5. Fix a performance regression caused by a bug fix in patch release 3.41.1.
+6. Fix a few incorrect assert() statements.
+
 ## SQLite Release 3.41.1 On 2023-03-10
 
 1. Provide compile-time options -DHAVE_LOG2=0 and -DHAVE_LOG10=0 to enable SQLite to be compiled on systems that omit the standard library functions log2() and log10(), repectively.
