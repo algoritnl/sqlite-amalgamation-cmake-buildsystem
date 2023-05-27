@@ -1,5 +1,32 @@
 # Changelog
 
+## SQLite Release 3.42.0 On 2023-05-16
+
+1. Add the FTS5 secure-delete command. This option causes all forensic traces to be removed from the FTS5 inverted index when content is deleted.
+2. Enhance the JSON SQL functions to support JSON5 extensions.
+3. The SQLITE_CONFIG_LOG and SQLITE_CONFIG_PCACHE_HDRSZ calls to sqlite3_config() are now allowed to occur after sqlite3_initialize().
+4. New sqlite3_db_config() options: SQLITE_DBCONFIG_STMT_SCANSTATUS and SQLITE_DBCONFIG_REVERSE_SCANORDER.
+5. Query planner improvements:
+    1. Enable the "count-of-view" optimization by default.
+    2. Avoid computing unused columns in subqueries.
+    3. Improvements to the push-down optimization.
+6. Enhancements to the CLI:
+    1. Add the --unsafe-testing command-line option. Without this option, some dot-commands (ex: ".testctrl") are now disabled because those commands that are intended for testing only and can cause malfunctions misused.
+    2. Allow commands ".log on" and ".log off", even in --safe mode.
+    3. "--" as a command-line argument means all subsequent arguments that start with "-" are interpreted as normal non-option argument.
+    4. Magic parameters ":inf" and ":nan" bind to floating point literals Infinity and NaN, respectively.
+    5. The --utf8 command-line option omits all translation to or from MBCS on the Windows console for interactive sessions, and sets the console code page for UTF-8 I/O during such sessions. The --utf8 option is a no-op on all other platforms.
+7. Add the ability for application-defined SQL functions to have the same name as join keywords: CROSS, FULL, INNER, LEFT, NATURAL, OUTER, or RIGHT.
+8. Enhancements to PRAGMA integrity_check:
+    1. Detect and raise an error when a NaN value is stored in a NOT NULL column.
+    2. Improved error message output identifies the root page of a b-tree when an error is found within a b-tree.
+9. Allow the session extension to be configured to capture changes from tables that lack an explicit ROWID.
+10. Added the subsecond modifier to the date and time functions.
+11. Negative values passed into sqlite3_sleep() are henceforth interpreted as 0.
+12. The maximum recursion depth for JSON arrays and objects is lowered from 2000 to 1000.
+13. Extended the built-in printf() function so the comma option now works with floating-point conversions in addition to integer conversions.
+14. Miscellaneous bug fixes and performance optimizations
+
 ## SQLite Release 3.41.2 On 2023-03-22
 
 1. Multiple fixes for reads past the end of memory buffers (NB: reads not writes) in the following circumstances:
