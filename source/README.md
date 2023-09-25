@@ -1,4 +1,4 @@
-Download: https://sqlite.org/2023/sqlite-amalgamation-3410200.zip
+Download: https://sqlite.org/2023/sqlite-amalgamation-3420000.zip
 
 ```
 Archive:  sqlite-amalgamation-3420000.zip
