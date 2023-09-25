@@ -145,6 +145,7 @@ check_symbol_exists(strerror_r string.h HAVE_STRERROR_R)
 check_symbol_exists(gmtime_r time.h HAVE_GMTIME_R)
 check_symbol_exists(localtime_r time.h HAVE_LOCALTIME_R)
 check_symbol_exists(localtime_s time.h HAVE_LOCALTIME_S)
+check_symbol_exists(nanosleep time.h HAVE_NANOSLEEP)
 
 check_symbol_exists(fdatasync unistd.h HAVE_FDATASYNC)
 check_symbol_exists(gethostuuid unistd.h HAVE_GETHOSTUUID)
@@ -270,6 +271,7 @@ target_compile_definitions(SQLite3
         $<$<BOOL:${HAVE_LSTAT}>:HAVE_LSTAT>
         $<$<BOOL:${HAVE_MALLOC_H}>:HAVE_MALLOC_H>
         $<$<BOOL:${HAVE_MALLOC_USABLE_SIZE}>:HAVE_MALLOC_USABLE_SIZE>
+        HAVE_NANOSLEEP=$<BOOL:${HAVE_NANOSLEEP}>
         $<$<BOOL:${HAVE_POSIX_FALLOCATE}>:HAVE_POSIX_FALLOCATE>
         $<$<BOOL:${HAVE_PREAD}>:HAVE_PREAD>
         $<$<BOOL:${HAVE_PREAD64}>:HAVE_PREAD64>
