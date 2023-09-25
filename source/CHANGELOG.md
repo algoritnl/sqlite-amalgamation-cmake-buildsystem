@@ -1,6 +1,14 @@
 # Changelog
 
+## SQLite Release 3.43.1 On 2023-09-11
+
+1. Fix a regression in the way that the sum(), avg(), and total() aggregate functions handle infinities.
+2. Fix a bug in the json_array_length() function that occurs when the argument comes directly from json_remove().
+3. Fix the omit-unused-subquery-columns optimization (introduced in in version 3.42.0) so that it works correctly if the subquery is a compound where one arm is DISTINCT and the other is not.
+4. Other minor fixes.
+
 ## SQLite Release 3.43.0 On 2023-08-24
+
 1. Add support for Contentless-Delete FTS5 Indexes. This is a variety of FTS5 full-text search index that omits storing the content that is being indexed while also allowing records to be deleted.
 2. Enhancements to the date and time functions:
     1. Added new time shift modifiers of the form ±YYYY-MM-DD HH:MM:SS.SSS.
