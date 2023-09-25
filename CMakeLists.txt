@@ -255,6 +255,7 @@ target_compile_definitions(SQLite3
 
 target_compile_definitions(SQLite3
     PRIVATE
+        $<$<PLATFORM_ID:Windows>:SQLITE_USE_SEH>
         $<$<BOOL:${HAVE_FDATASYNC}>:HAVE_FDATASYNC>
         $<$<BOOL:${HAVE_GETHOSTUUID}>:HAVE_GETHOSTUUID>
         $<$<BOOL:${HAVE_GMTIME_R}>:HAVE_GMTIME_R>
