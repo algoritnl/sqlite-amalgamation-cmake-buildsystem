@@ -1,5 +1,24 @@
 # Changelog
 
+## SQLite Release 3.43.0 On 2023-08-24
+1. Add support for Contentless-Delete FTS5 Indexes. This is a variety of FTS5 full-text search index that omits storing the content that is being indexed while also allowing records to be deleted.
+2. Enhancements to the date and time functions:
+    1. Added new time shift modifiers of the form ±YYYY-MM-DD HH:MM:SS.SSS.
+    2. Added the timediff() SQL function.
+3. Added the octet_length(X) SQL function.
+4. Added the sqlite3_stmt_explain() API.
+5. Query planner enhancements:
+    1. Generalize the LEFT JOIN strength reduction optimization so that it works for RIGHT and FULL JOINs as well. Rename it to OUTER JOIN strength reduction.
+    2. Enhance the theorem prover in the OUTER JOIN strength reduction optimization so that it returns fewer false-negatives.
+6. Enhancements to the decimal extension:
+    1. New function decimal_pow2(N) returns the N-th power of 2 for integer N between -20000 and +20000.
+    2. New function decimal_exp(X) works like decimal(X) except that it returns the result in exponential notation - with a "e+NN" at the end.
+    3. If X is a floating-point value, then the decimal(X) function now does a full expansion of that value into its exact decimal equivalent.
+7. Performance enhancements to JSON processing results in a 2x performance improvement for some kinds of processing on large JSON strings.
+8. New makefile target "verify-source" checks to ensure that there are no unintentional changes in the source tree. (Works for canonical source code only - not for precompiled amalgamation tarballs.)
+9. Added the SQLITE_USE_SEH compile-time option that enables Structured Exception Handling on Windows while working with the memory-mapped shm file that is part of WAL mode processing. This option is enabled by default when building on Windows using Makefile.msc.
+10. The VFS for unix now assumes that the nanosleep() system call is available unless compiled with -DHAVE_NANOSLEEP=0.
+
 ## SQLite Release 3.42.0 On 2023-05-16
 
 1. Add the FTS5 secure-delete command. This option causes all forensic traces to be removed from the FTS5 inverted index when content is deleted.
