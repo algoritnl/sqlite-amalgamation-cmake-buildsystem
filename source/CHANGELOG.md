@@ -1,5 +1,11 @@
 # Changelog
 
+## SQLite Release 3.43.2 On 2023-10-10
+
+1. Fix a couple of obscure UAF errors and an obscure memory leak.
+2. Omit the use of the sprintf() function from the standard library in the CLI, as this now generates warnings on some platforms.
+3. Avoid conversion of a double into unsigned long long integer, as some platforms do not do such conversions correctly.
+
 ## SQLite Release 3.43.1 On 2023-09-11
 
 1. Fix a regression in the way that the sum(), avg(), and total() aggregate functions handle infinities.
