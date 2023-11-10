@@ -1,5 +1,24 @@
 # Changelog
 
+## SQLite Release 3.44.0 On 2023-11-01
+
+1. Aggregate functions can now include an ORDER BY clause after their last parameter. The arguments to the function are processed in the order specified. This can be important for functions like string_agg() and json_group_array().
+2. Add support for the concat() and concat_ws() scalar SQL functions, compatible with PostgreSQL, SQLServer, and MySQL.
+3. Add support for the string_agg() aggregate SQL function, compatible with PostgreSQL and SQLServer.
+4. New conversion letters on the strftime() SQL function: %e %F %I %k %l %p %P %R %T %u
+5. Add new C-language APIs: sqlite3_get_clientdata() and sqlite3_set_clientdata().
+6. Many errors associated with CREATE TABLE are now raised when the CREATE TABLE statement itself is run, rather than being deferred until the first time the table is actually used.
+7. The PRAGMA integrity_check command now verifies the consistency of the content in various built-in virtual tables using the new xIntegrity method. This works for the FTS3, FTS4, FTS5, RTREE, and GEOPOLY extensions.
+8. The SQLITE_DBCONFIG_DEFENSIVE setting now prevents PRAGMA writable_schema from being turned on. Previously writable_schema could be turned on, but would not actually allow the schema to be writable. Now it simply cannot be turned on.
+9. Tag the built-in FTS3, FTS4, FTS5, RTREE, and GEOPOLY virtual tables as SQLITE_VTAB_INNOCUOUS so that they can be used inside of triggers in high-security deployments.
+10. The PRAGMA case_sensitive_like statement is deprecated, as its use when the schema contains LIKE operators can lead to reports of database corruption by PRAGMA integrity_check.
+11. SQLITE_USE_SEH (Structured Exception Handling) is now enabled by default whenever SQLite is built using the Microsoft C compiler. It can be disabled using -DSQLITE_USE_SEH=0
+12. Query planner optimizations:
+    1. In partial index scans, if the WHERE clause implies a constant value for a table column, replace occurrences of that table column with the constant. This increases the likelihood of the partial index being a covering index.
+    2. Disable the view-scan optimization (added in version 3.42.0 - item 1c) as it was causing multiple performance regressions. In its place, reduce the estimated row count for DISTINCT subqueries by a factor of 8.
+13. SQLite now performs run-time detection of whether or not the underlying hardware supports "long double" with precision greater than "double" and uses appropriate floating-point routines depending on what it discovered.
+14. The CLI for Windows now defaults to using UTF-8 for both input and output on platforms that support it. The --no-utf8 option is available to disable UTF8 support.
+
 ## SQLite Release 3.43.2 On 2023-10-10
 
 1. Fix a couple of obscure UAF errors and an obscure memory leak.
