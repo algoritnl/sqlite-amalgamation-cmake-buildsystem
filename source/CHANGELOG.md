@@ -1,5 +1,12 @@
 # Changelog
 
+## SQLite Release 3.44.2 On 2023-11-24
+
+1. Fix a mistake in the CLI that was introduced by the fix (item 15 above) in 3.44.1.
+2. Fix a problem in FTS5 that was discovered during internal fuzz testing only minutes after the 3.44.1 release was tagged.
+3. Fix incomplete assert() statements that the fuzzer discovered the day after the previous release.
+4. Fix a couple of harmless compiler warnings that appeared in debug builds with GCC 16.
+
 ## SQLite Release 3.44.1 On 2023-11-22
 
 1. Change the CLI so that it uses UTF-16 for console I/O on Windows. This enables proper display of unicode text on old Windows7 machines.
