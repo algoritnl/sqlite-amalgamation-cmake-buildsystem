@@ -1,5 +1,10 @@
 # Changelog
 
+## SQLite Release 3.44.1 On 2023-11-22
+
+1. Change the CLI so that it uses UTF-16 for console I/O on Windows. This enables proper display of unicode text on old Windows7 machines.
+2. Other obscure bug fixes.
+
 ## SQLite Release 3.44.0 On 2023-11-01
 
 1. Aggregate functions can now include an ORDER BY clause after their last parameter. The arguments to the function are processed in the order specified. This can be important for functions like string_agg() and json_group_array().
