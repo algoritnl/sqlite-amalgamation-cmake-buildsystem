@@ -1,5 +1,22 @@
 # Changelog
 
+## QLite Release 3.45.0 On 2024-01-15
+
+1. Added the SQLITE_RESULT_SUBTYPE property for application-defined SQL functions. All application defined SQL functions that invokes sqlite3_result_subtype() must be registered with this new property. Failure to do so might cause the call to sqlite3_result_subtype() to behave as a no-op. Compile with -DSQLITE_STRICT_SUBTYPE=1 to cause an SQL error to be raised if a function that is not SQLITE_RESULT_SUBTYPE tries invokes sqlite3_result_subtype(). The use of -DSQLITE_STRICT_SUBTYPE=1 is a recommended compile-time option for every application that makes use of subtypes.
+2. Enhancements to the JSON SQL functions:
+    1. All JSON functions are rewritten to use a new internal parse tree format called JSONB. The new parse-tree format is serializable and hence can be stored in the database to avoid unnecessary re-parsing whenever the JSON value is used.
+    2. New versions of JSON-generating functions generate binary JSONB instead of JSON text.
+    3. The json_valid() function adds an optional second argument that specifies what it means for the first argument to be "well-formed".
+3. Add the FTS5 tokendata option to the FTS5 virtual table.
+4. The SQLITE_DIRECT_OVERFLOW_READ optimization is now enabled by default. Disable it at compile-time using -DSQLITE_DIRECT_OVERFLOW_READ=0.
+5. Query planner improvements:
+    1. Do not allow the transitive constraint optimization to trick the query planner into using a range constraint when a better equality constraint is available. (Forum post 2568d1f6e6.)
+    2. The query planner now does a better job of disregarding indexes that ANALYZE identifies as low-quality. (Forum post 6f0958b03b.)
+6. Increase the default value for SQLITE_MAX_PAGE_COUNT from 1073741824 to 4294967294.
+7. Enhancements to the CLI:
+    1. Improvements to the display of UTF-8 content on Windows
+    2. Automatically detect playback of ".dump" scripts and make appropriate changes to settings such as ".dbconfig defensive off" and ".dbconfig dqs_dll on".
+
 ## SQLite Release 3.44.2 On 2023-11-24
 
 1. Fix a mistake in the CLI that was introduced by the fix (item 15 above) in 3.44.1.
