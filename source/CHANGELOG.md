@@ -1,6 +1,17 @@
 # Changelog
 
-## QLite Release 3.45.0 On 2024-01-15
+## SQLite Release 3.45.1 On 2024-01-30
+
+1. Restore the JSON BLOB input bug, and promise to support the anomaly in subsequent releases, for backward compatibility.
+2. Fix the PRAGMA integrity_check command so that it works on read-only databases that contain FTS3 and FTS5 tables. This resolves an issue introduced in version 3.44.0 but was undiscovered until after the 3.45.0 release.
+3. Fix issues associated with processing corrupt JSONB inputs:
+    1. Prevent exponential runtime when converting a corrupt JSONB into text.
+    2. Fix a possible read of one byte past the end of the JSONB blob when converting a corrupt JSONB into text.
+    3. Enhanced testing using jfuzz to prevent any future JSONB problems such as the above.
+4. Fix a long-standing bug in which a read of a few bytes past the end of a memory-mapped segment might occur when accessing a craftily corrupted database using memory-mapped database.
+5. Fix a long-standing bug in which a NULL pointer dereference might occur in the bytecode engine due to incorrect bytecode being generated for a class of SQL statements that are deliberately designed to stress the query planner but which are otherwise pointless.
+
+## SQLite Release 3.45.0 On 2024-01-15
 
 1. Added the SQLITE_RESULT_SUBTYPE property for application-defined SQL functions. All application defined SQL functions that invokes sqlite3_result_subtype() must be registered with this new property. Failure to do so might cause the call to sqlite3_result_subtype() to behave as a no-op. Compile with -DSQLITE_STRICT_SUBTYPE=1 to cause an SQL error to be raised if a function that is not SQLITE_RESULT_SUBTYPE tries invokes sqlite3_result_subtype(). The use of -DSQLITE_STRICT_SUBTYPE=1 is a recommended compile-time option for every application that makes use of subtypes.
 2. Enhancements to the JSON SQL functions:
