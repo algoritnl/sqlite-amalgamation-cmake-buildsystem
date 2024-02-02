@@ -92,6 +92,8 @@ option(SQLITE_OMIT_LOAD_EXTENSION "Omit the extension loading mechanism." OFF)
 option(SQLITE_OMIT_PROGRESS_CALLBACK "Omit the capability to issue progress callbacks." OFF)
 option(SQLITE_OMIT_SHARED_CACHE "Omit support for shared-cache mode." OFF)
 
+option(SQLITE_STRICT_SUBTYPE "This option helps to identify problems with application-defined SQL functions." ON)
+
 option(SQLITE_USE_ALLOCA "Use alloca for memory allocations if possible." OFF)
 
 if(SQLITE_ENABLE_COLUMN_METADATA AND SQLITE_OMIT_DECLTYPE)
@@ -252,6 +254,7 @@ target_compile_definitions(SQLite3
         $<$<BOOL:${SQLITE_OMIT_JSON}>:SQLITE_OMIT_JSON>
         $<$<BOOL:${SQLITE_OMIT_PROGRESS_CALLBACK}>:SQLITE_OMIT_PROGRESS_CALLBACK>
         $<$<BOOL:${SQLITE_OMIT_SHARED_CACHE}>:SQLITE_OMIT_SHARED_CACHE>
+        $<$<BOOL:${SQLITE_STRICT_SUBTYPE}>:SQLITE_STRICT_SUBTYPE=1>
         $<$<BOOL:${SQLITE_USE_ALLOCA}>:SQLITE_USE_ALLOCA>)
 
 target_compile_definitions(SQLite3

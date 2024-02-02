@@ -145,6 +145,14 @@ system if you need them.
   itself and the application is required to invoke sqlite3_initialize() directly
   prior to beginning use of the SQLite library.
 
+- `SQLITE_STRICT_SUBTYPE:BOOL`=**ON**:
+  value is a **boolean**, default = **ON**.  
+  This option causes application-defined SQL functions to raise an SQL error if
+  they invoke the sqlite3_result_subtype() interface but were not registered
+  with the SQLITE_RESULT_SUBTYPE property. This recommended option helps to
+  identify problems in the implementation of application-defined SQL functions
+  early in the development cycle.
+
 ### Other Options
 
 - `SQLITE_ENABLE_API_ARMOR:BOOL`=**OFF**:
