@@ -1,5 +1,28 @@
 # Changelog
 
+## SQLite Release 3.46.0 On 2024-05-23
+
+1. Enhance PRAGMA optimize in multiple ways, to make it simpler to use:
+    1. PRAGMA optimize automatically implements a temporary analysis limit to prevent excess runtime on large databases.
+    2. Added the new 0x10000 bitmask option to check for updates on all tables.
+    3. Automatically re-analyze tables that do not have sqlite_stat1 entries.
+2. Enhancements to the date and time functions:
+    1. The strftime() SQL function now supports %G, %g, %U, and %V.
+    2. New modifiers 'ceiling' and 'floor' control the algorithm used to resolve ambiguous dates when shifting a date by an integer number of months and/or years.
+    3. The 'utc' and 'localtime' modifiers are now no-ops if SQLite knows that the time is already in UTC or in the localtime, respectively.
+3. Add support for underscore ("_") characters between digits in numeric literals.
+4. Add the json_pretty() SQL function.
+5. Query planner improvements:
+    1. The "VALUES-as-coroutine" optimization enables INSERT statements with thousands of rows in the VALUES clause to parse and run in about half the time and using about half as much memory.
+    2. Allow the use of an index for queries like "SELECT count(DISTINCT col) FROM ...", even if the index records are not smaller than the table records.
+    3. Improved recognition of cases where the value of an SQL function is constant because all its arguments are constant.
+    3. Enhance the WHERE-clause push-down optimization so that it is able to push down WHERE clause terms containing uncorrelated subqueries.
+6. Allocate additional memory from the heap for the SQL parser stack if that stack overflows, rather than reporting a "parser stack overflow" error.
+7. JSON changes:
+    1. Allow ASCII control characters within JSON5 string literals.
+    2. Fix the -> and ->> operators so that when the right-hand side operand is a string that looks like an integer it is still treated as a string, because that is what PostgreSQL does.
+8. Allow large hexadecimal literals to be used as the DEFAULT value to a table column.
+
 ## SQLite Release 3.45.3 On 2024-04-15
 
 1. Fix a long-standing bug (going back to version 3.24.0) that might (rarely) cause the "old.*" values of an UPDATE trigger to be incorrect if that trigger fires in response to an UPSERT. Forum post 284955a3cd454a15.
