@@ -1,5 +1,11 @@
 # Changelog
 
+## SQLite Release 3.45.3 On 2024-04-15
+
+1. Fix a long-standing bug (going back to version 3.24.0) that might (rarely) cause the "old.*" values of an UPDATE trigger to be incorrect if that trigger fires in response to an UPSERT. Forum post 284955a3cd454a15.
+2. Fix a bug in sum() that could cause it to return NULL when it should return Infinity. Forum post 23b8688ef4.
+3. Other trifling corrections and compiler warning fixes that have come up since the previous patch release. See the timeline for details.
+
 ## SQLite Release 3.45.2 On 2024-03-12
 
 1. Fix an error in UPSERT, introduced by enhancement 3a in version 3.35.0 (2021-03-12), that could cause an index to get out-of-sync with its table. Forum thread 919c6579c8.
