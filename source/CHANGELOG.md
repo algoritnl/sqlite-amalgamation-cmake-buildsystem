@@ -1,5 +1,11 @@
 # Changelog
 
+## SQLite Release 3.45.2 On 2024-03-12
+
+1. Fix an error in UPSERT, introduced by enhancement 3a in version 3.35.0 (2021-03-12), that could cause an index to get out-of-sync with its table. Forum thread 919c6579c8.
+2. Reduce the scope of the NOT NULL strength reduction optimization that was added as item 8e in version 3.35.0 (2021-03-12). The optimization was being attempted in some contexts where it did not work, resulting in incorrect query results. Forum thread 440f2a2f17.
+3. Other trifling corrections and compiler warning fixes that have come up since the previous patch release. See the timeline for details.
+
 ## SQLite Release 3.45.1 On 2024-01-30
 
 1. Restore the JSON BLOB input bug, and promise to support the anomaly in subsequent releases, for backward compatibility.

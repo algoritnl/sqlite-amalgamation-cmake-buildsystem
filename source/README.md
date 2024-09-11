@@ -1,14 +1,14 @@
-Download: https://sqlite.org/2024/sqlite-amalgamation-3450100.zip
+Download: https://sqlite.org/2024/sqlite-amalgamation-3450200.zip
 
 ```
-Archive:  sqlite-amalgamation-3450100.zip
+Archive:  sqlite-amalgamation-3450200.zip
  Length   Method    Size  Cmpr    Date    Time   CRC-32   Name
 --------  ------  ------- ---- ---------- ----- --------  ----
-       0  Stored        0   0% 2024-01-30 17:24 00000000  sqlite-amalgamation-3450100/
- 9018109  Defl:N  2321520  74% 2024-01-30 17:24 4629c591  sqlite-amalgamation-3450100/sqlite3.c
-  910851  Defl:N   235735  74% 2024-01-30 17:24 e72dd380  sqlite-amalgamation-3450100/shell.c
-  640658  Defl:N   165811  74% 2024-01-30 17:24 0e669db2  sqlite-amalgamation-3450100/sqlite3.h
-   38149  Defl:N     6615  83% 2024-01-30 17:24 c5ea7fc8  sqlite-amalgamation-3450100/sqlite3ext.h
+       0  Stored        0   0% 2024-03-12 12:23 00000000  sqlite-amalgamation-3450200/
+ 9022640  Defl:N  2322722  74% 2024-03-12 12:23 07a015d2  sqlite-amalgamation-3450200/sqlite3.c
+  911257  Defl:N   235796  74% 2024-03-12 12:23 fa2aca4a  sqlite-amalgamation-3450200/shell.c
+  640806  Defl:N   165859  74% 2024-03-12 12:23 5f4fd722  sqlite-amalgamation-3450200/sqlite3.h
+   38149  Defl:N     6615  83% 2024-03-12 12:23 c5ea7fc8  sqlite-amalgamation-3450200/sqlite3ext.h
 --------          -------  ---                            -------
-10607767          2729681  74%                            5 files
+10612852          2730992  74%                            5 files
 ```
