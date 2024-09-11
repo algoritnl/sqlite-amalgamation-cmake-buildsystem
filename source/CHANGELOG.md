@@ -1,5 +1,18 @@
 # Changelog
 
+## SQLite Release 3.46.1 On 2024-08-13
+
+1. Improved robustness while parsing the tokenize= arguments in FTS5. Forum post 171bcc2bcd.
+2. Enhancements to covering index prediction in the query planner. Add early detection of over-prediction of covering indexes so that sqlite3_prepare() will return an error rather than just generate bad bytecode. Forum post e60e4c295d22f8ce.
+3. Do not let the number of terms on a VALUES clause be limited by SQLITE_LIMIT_COMPOUND_SELECT, even if the VALUES clause contains elements that appear to be variables due to double-quoted string literals.
+4. Fix the window function version of group_concat() so that it returns an empty string if it has one or more empty string inputs.
+5. In FTS5 secure-delete mode, fix false-positive integrity-check reports about corrupt indexes.
+6. Syntax errors in ALTER TABLE should always return SQLITE_ERROR. In some cases, they were formerly returning SQLITE_INTERNAL.
+7. JavaScript/WASM:
+    1. Fix a corruption-causing bug in the JavaScript "opfs" VFS.
+    2. Work around a couple of browser-specific OPFS quirks.
+8. Other minor fixes.
+
 ## SQLite Release 3.46.0 On 2024-05-23
 
 1. Enhance PRAGMA optimize in multiple ways, to make it simpler to use:
