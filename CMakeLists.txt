@@ -112,6 +112,10 @@ if(NOT SQLITE_MAX_EXPR_DEPTH GREATER_EQUAL -1)
     message(SEND_ERROR "Configuration SQLITE_MAX_EXPR_DEPTH=${SQLITE_MAX_EXPR_DEPTH} is not valid.")
 endif()
 
+option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
+option(BUILD_TESTING "Build the testing tree." ON)
+option(BUILD_SHELL "Build the SQLite3 interactive shell." ON)
+
 # -- Introspection -------------------------------------------------------------
 
 if(CMAKE_C_COMPILER_ID MATCHES "(GNU|Clang)")
@@ -175,18 +179,18 @@ if(UNIX)
     find_library(MATH_LIBRARY m)
 endif()
 
-if(UNIX)
-    find_package(PkgConfig)
-    if(PKG_CONFIG_FOUND)
-        pkg_search_module(Readline IMPORTED_TARGET readline)
+if(BUILD_SHELL)
+    if(UNIX)
+        find_package(PkgConfig)
+        if(PKG_CONFIG_FOUND)
+            pkg_search_module(Readline IMPORTED_TARGET readline)
+        endif()
     endif()
+
+    find_package(ZLIB)
 endif()
 
-find_package(ZLIB)
-
 # -- Library -------------------------------------------------------------------
-
-option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
 
 add_library(SQLite3)
 add_library(SQLite::SQLite3 ALIAS SQLite3)
@@ -324,33 +328,33 @@ endif()
 
 # -- Interactive shell ---------------------------------------------------------
 
-add_executable(Shell)
-add_executable(SQLite::Shell ALIAS Shell)
+if(BUILD_SHELL)
+    add_executable(Shell)
+    add_executable(SQLite::Shell ALIAS Shell)
 
-set_target_properties(Shell PROPERTIES
-    OUTPUT_NAME sqlite3
-    INSTALL_RPATH "$ORIGIN/../lib")
+    set_target_properties(Shell PROPERTIES
+        OUTPUT_NAME sqlite3
+        INSTALL_RPATH "$ORIGIN/../lib")
 
-target_sources(Shell
-    PRIVATE source/shell.c)
+    target_sources(Shell
+        PRIVATE source/shell.c)
 
-target_link_libraries(Shell PRIVATE SQLite::SQLite3)
+    target_link_libraries(Shell PRIVATE SQLite::SQLite3)
 
-if(TARGET PkgConfig::Readline)
-    target_compile_definitions(Shell PRIVATE HAVE_READLINE)
-    target_link_libraries(Shell PRIVATE PkgConfig::Readline)
-endif()
+    if(TARGET PkgConfig::Readline)
+        target_compile_definitions(Shell PRIVATE HAVE_READLINE)
+        target_link_libraries(Shell PRIVATE PkgConfig::Readline)
+    endif()
 
-if(TARGET ZLIB::ZLIB)
-    target_compile_definitions(Shell PRIVATE SQLITE_HAVE_ZLIB)
-    target_link_libraries(Shell PRIVATE ZLIB::ZLIB)
+    if(TARGET ZLIB::ZLIB)
+        target_compile_definitions(Shell PRIVATE SQLITE_HAVE_ZLIB)
+        target_link_libraries(Shell PRIVATE ZLIB::ZLIB)
+    endif()
 endif()
 
 # -- Testing -------------------------------------------------------------------
 
-option(BUILD_TESTING "Build the testing tree." ON)
-
-if(BUILD_TESTING)
+if(BUILD_SHELL AND BUILD_TESTING)
     enable_testing()
     add_test(NAME SQLiteShellCheckVersion
         COMMAND SQLite::Shell -version)
@@ -362,9 +366,14 @@ endif()
 
 include(GNUInstallDirs)
 
-install(TARGETS SQLite3 Shell
+install(TARGETS SQLite3
     EXPORT SQLite3Targets
     FILE_SET HEADERS)
+
+if(BUILD_SHELL)
+    install(TARGETS Shell
+        EXPORT SQLite3Targets)
+endif()
 
 # -- Export --------------------------------------------------------------------
 
