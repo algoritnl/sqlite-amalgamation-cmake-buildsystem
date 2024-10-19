@@ -171,17 +171,6 @@ if(SQLITE_ENABLE_ICU)
     find_package(ICU REQUIRED COMPONENTS i18n uc)
 endif()
 
-if(SQLITE_THREADSAFE STREQUAL "0")
-    message(STATUS "Building the SQLite3 library in single-threading mode")
-    set(SQLITE_THREADMODEL_SUFFIX "-st")
-elseif(SQLITE_THREADSAFE STREQUAL "1")
-    message(STATUS "Building the SQLite3 library in serialized mode")
-    set(SQLITE_THREADMODEL_SUFFIX "")
-elseif(SQLITE_THREADSAFE STREQUAL "2")
-    message(STATUS "Building the SQLite3 library in multi-threading mode")
-    set(SQLITE_THREADMODEL_SUFFIX "-mt")
-endif()
-
 if(UNIX)
     find_library(MATH_LIBRARY m)
 endif()
@@ -202,6 +191,17 @@ option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
 add_library(SQLite3)
 add_library(SQLite::SQLite3 ALIAS SQLite3)
 
+if(SQLITE_THREADSAFE STREQUAL "0")
+    message(STATUS "Building the SQLite3 library in single-threading mode")
+    set(SQLITE_THREADMODEL_SUFFIX "-st")
+elseif(SQLITE_THREADSAFE STREQUAL "1")
+    message(STATUS "Building the SQLite3 library in serialized mode")
+    set(SQLITE_THREADMODEL_SUFFIX "")
+elseif(SQLITE_THREADSAFE STREQUAL "2")
+    message(STATUS "Building the SQLite3 library in multi-threading mode")
+    set(SQLITE_THREADMODEL_SUFFIX "-mt")
+endif()
+
 set_target_properties(SQLite3 PROPERTIES
     OUTPUT_NAME sqlite3${SQLITE_THREADMODEL_SUFFIX}
     DEBUG_POSTFIX "-dbg"
@@ -218,13 +218,27 @@ target_include_directories(SQLite3
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>
         $<INSTALL_INTERFACE:include>)
 
+if(SQLITE_ENABLE_PREUPDATE_HOOK)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_ENABLE_PREUPDATE_HOOK)
+endif()
+
+if(SQLITE_ENABLE_SESSION)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_ENABLE_SESSION)
+endif()
+
+if(SQLITE_OMIT_COMPILEOPTION_DIAGS)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_OMIT_COMPILEOPTION_DIAGS)
+endif()
+
+if(SQLITE_OMIT_DEPRECATED)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_OMIT_DEPRECATED)
+endif()
+
+if(SQLITE_OMIT_LOAD_EXTENSION)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_OMIT_LOAD_EXTENSION)
+endif()
+
 target_compile_definitions(SQLite3
-    PUBLIC
-        $<$<BOOL:${SQLITE_ENABLE_PREUPDATE_HOOK}>:SQLITE_ENABLE_PREUPDATE_HOOK>
-        $<$<BOOL:${SQLITE_ENABLE_SESSION}>:SQLITE_ENABLE_SESSION>
-        $<$<BOOL:${SQLITE_OMIT_COMPILEOPTION_DIAGS}>:SQLITE_OMIT_COMPILEOPTION_DIAGS>
-        $<$<BOOL:${SQLITE_OMIT_DEPRECATED}>:SQLITE_OMIT_DEPRECATED>
-        $<$<BOOL:${SQLITE_OMIT_LOAD_EXTENSION}>:SQLITE_OMIT_LOAD_EXTENSION>
     PRIVATE
         SQLITE_DEFAULT_MEMSTATUS=${SQLITE_DEFAULT_MEMSTATUS}
         SQLITE_DEFAULT_SYNCHRONOUS=${SQLITE_DEFAULT_SYNCHRONOUS}
@@ -291,27 +305,19 @@ target_compile_definitions(SQLite3
         $<$<BOOL:${HAVE_UTIME}>:HAVE_UTIME>)
 
 if(MATH_LIBRARY)
-    target_link_libraries(SQLite3
-        INTERFACE $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:${MATH_LIBRARY}>
-        PRIVATE $<$<BOOL:${BUILD_SHARED_LIBS}>:${MATH_LIBRARY}>)
+    target_link_libraries(SQLite3 PUBLIC ${MATH_LIBRARY})
 endif()
 
 if(TARGET Threads::Threads)
-    target_link_libraries(SQLite3
-        INTERFACE $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:Threads::Threads>
-        PRIVATE $<$<BOOL:${BUILD_SHARED_LIBS}>:Threads::Threads>)
+    target_link_libraries(SQLite3 PUBLIC Threads::Threads)
 endif()
 
 if(NOT SQLITE_OMIT_LOAD_EXTENSION)
-    target_link_libraries(SQLite3
-        INTERFACE $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:${CMAKE_DL_LIBS}>
-        PRIVATE $<$<BOOL:${BUILD_SHARED_LIBS}>:${CMAKE_DL_LIBS}>)
+    target_link_libraries(SQLite3 PUBLIC ${CMAKE_DL_LIBS})
 endif()
 
 if(SQLITE_ENABLE_ICU)
-    target_link_libraries(SQLite3
-        INTERFACE $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:ICU::i18n ICU::uc>
-        PRIVATE $<$<BOOL:${BUILD_SHARED_LIBS}>:ICU::i18n ICU::uc>)
+    target_link_libraries(SQLite3 PUBLIC ICU::i18n ICU::uc)
 endif()
 
 # -- Interactive shell ---------------------------------------------------------
@@ -326,8 +332,7 @@ set_target_properties(Shell PROPERTIES
 target_sources(Shell
     PRIVATE source/shell.c)
 
-target_link_libraries(Shell
-    PRIVATE SQLite::SQLite3)
+target_link_libraries(Shell PRIVATE SQLite::SQLite3)
 
 if(TARGET PkgConfig::Readline)
     target_compile_definitions(Shell PRIVATE HAVE_READLINE)
