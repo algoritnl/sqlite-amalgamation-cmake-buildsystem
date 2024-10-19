@@ -10,7 +10,7 @@
 #
 # ------------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.16...3.25.2)
+cmake_minimum_required(VERSION 3.23...3.30)
 
 # -- Project -------------------------------------------------------------------
 
@@ -211,7 +211,9 @@ set_target_properties(SQLite3 PROPERTIES
     WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 target_sources(SQLite3
-    PRIVATE source/sqlite3.c)
+    PRIVATE source/sqlite3.c
+    PUBLIC FILE_SET HEADERS BASE_DIRS source
+        FILES source/sqlite3.h source/sqlite3ext.h)
 
 target_include_directories(SQLite3
     INTERFACE
@@ -361,20 +363,17 @@ endif()
 include(GNUInstallDirs)
 
 install(TARGETS SQLite3 Shell
-    EXPORT SQLite3Targets)
-
-install(FILES source/sqlite3.h
-              source/sqlite3ext.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    EXPORT SQLite3Targets
+    FILE_SET HEADERS)
 
 # -- Export --------------------------------------------------------------------
 
 install(EXPORT SQLite3Targets
-    FILE SQLite3Targets.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SQLite3
-    NAMESPACE SQLite::)
+    NAMESPACE SQLite::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SQLite3)
 
 export(EXPORT SQLite3Targets
+    NAMESPACE SQLite::
     FILE ${CMAKE_CURRENT_BINARY_DIR}/SQLite3Targets.cmake)
 
 include(CMakePackageConfigHelpers)
