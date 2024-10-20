@@ -112,10 +112,6 @@ if(NOT SQLITE_MAX_EXPR_DEPTH GREATER_EQUAL -1)
     message(SEND_ERROR "Configuration SQLITE_MAX_EXPR_DEPTH=${SQLITE_MAX_EXPR_DEPTH} is not valid.")
 endif()
 
-option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
-option(BUILD_TESTING "Build the testing tree." ON)
-option(BUILD_SHELL "Build the SQLite3 interactive shell." ON)
-
 # -- Introspection -------------------------------------------------------------
 
 if(CMAKE_C_COMPILER_ID MATCHES "(GNU|Clang)")
@@ -179,18 +175,9 @@ if(UNIX)
     find_library(MATH_LIBRARY m)
 endif()
 
-if(BUILD_SHELL)
-    if(UNIX)
-        find_package(PkgConfig)
-        if(PKG_CONFIG_FOUND)
-            pkg_search_module(Readline IMPORTED_TARGET readline)
-        endif()
-    endif()
-
-    find_package(ZLIB)
-endif()
-
 # -- Library -------------------------------------------------------------------
+
+option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
 
 add_library(SQLite3)
 add_library(SQLite::SQLite3 ALIAS SQLite3)
@@ -328,7 +315,9 @@ endif()
 
 # -- Interactive shell ---------------------------------------------------------
 
-if(BUILD_SHELL)
+option(SQLITE_BUILD_SHELL "Build the SQLite3 interactive shell." ON)
+
+if(SQLITE_BUILD_SHELL)
     add_executable(Shell)
     add_executable(SQLite::Shell ALIAS Shell)
 
@@ -340,6 +329,15 @@ if(BUILD_SHELL)
         PRIVATE source/shell.c)
 
     target_link_libraries(Shell PRIVATE SQLite::SQLite3)
+
+    if(UNIX)
+        find_package(PkgConfig)
+        if(PKG_CONFIG_FOUND)
+            pkg_search_module(Readline IMPORTED_TARGET readline)
+        endif()
+    endif()
+
+    find_package(ZLIB)
 
     if(TARGET PkgConfig::Readline)
         target_compile_definitions(Shell PRIVATE HAVE_READLINE)
@@ -354,7 +352,9 @@ endif()
 
 # -- Testing -------------------------------------------------------------------
 
-if(BUILD_SHELL AND BUILD_TESTING)
+option(BUILD_TESTING "Build the testing tree." ON)
+
+if(BUILD_TESTING AND SQLITE_BUILD_SHELL)
     enable_testing()
     add_test(NAME SQLiteShellCheckVersion
         COMMAND SQLite::Shell -version)
@@ -370,7 +370,7 @@ install(TARGETS SQLite3
     EXPORT SQLite3Targets
     FILE_SET HEADERS)
 
-if(BUILD_SHELL)
+if(SQLITE_BUILD_SHELL)
     install(TARGETS Shell
         EXPORT SQLite3Targets)
 endif()
