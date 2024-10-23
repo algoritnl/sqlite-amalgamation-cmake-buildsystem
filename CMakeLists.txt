@@ -10,7 +10,7 @@
 #
 # ------------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.16...3.25.2)
+cmake_minimum_required(VERSION 3.23...3.30)
 
 # -- Project -------------------------------------------------------------------
 
@@ -171,6 +171,17 @@ if(SQLITE_ENABLE_ICU)
     find_package(ICU REQUIRED COMPONENTS i18n uc)
 endif()
 
+if(UNIX)
+    find_library(MATH_LIBRARY m)
+endif()
+
+# -- Library -------------------------------------------------------------------
+
+option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
+
+add_library(SQLite3)
+add_library(SQLite::SQLite3 ALIAS SQLite3)
+
 if(SQLITE_THREADSAFE STREQUAL "0")
     message(STATUS "Building the SQLite3 library in single-threading mode")
     set(SQLITE_THREADMODEL_SUFFIX "-st")
@@ -182,26 +193,6 @@ elseif(SQLITE_THREADSAFE STREQUAL "2")
     set(SQLITE_THREADMODEL_SUFFIX "-mt")
 endif()
 
-if(UNIX)
-    find_library(MATH_LIBRARY m)
-endif()
-
-if(UNIX)
-    find_package(PkgConfig)
-    if(PKG_CONFIG_FOUND)
-        pkg_search_module(Readline IMPORTED_TARGET readline)
-    endif()
-endif()
-
-find_package(ZLIB)
-
-# -- Library -------------------------------------------------------------------
-
-option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
-
-add_library(SQLite3)
-add_library(SQLite::SQLite3 ALIAS SQLite3)
-
 set_target_properties(SQLite3 PROPERTIES
     OUTPUT_NAME sqlite3${SQLITE_THREADMODEL_SUFFIX}
     DEBUG_POSTFIX "-dbg"
@@ -211,20 +202,36 @@ set_target_properties(SQLite3 PROPERTIES
     WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 target_sources(SQLite3
-    PRIVATE source/sqlite3.c)
+    PRIVATE source/sqlite3.c
+    PUBLIC FILE_SET HEADERS BASE_DIRS source
+        FILES source/sqlite3.h source/sqlite3ext.h)
 
 target_include_directories(SQLite3
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>
         $<INSTALL_INTERFACE:include>)
 
+if(SQLITE_ENABLE_PREUPDATE_HOOK)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_ENABLE_PREUPDATE_HOOK)
+endif()
+
+if(SQLITE_ENABLE_SESSION)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_ENABLE_SESSION)
+endif()
+
+if(SQLITE_OMIT_COMPILEOPTION_DIAGS)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_OMIT_COMPILEOPTION_DIAGS)
+endif()
+
+if(SQLITE_OMIT_DEPRECATED)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_OMIT_DEPRECATED)
+endif()
+
+if(SQLITE_OMIT_LOAD_EXTENSION)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_OMIT_LOAD_EXTENSION)
+endif()
+
 target_compile_definitions(SQLite3
-    PUBLIC
-        $<$<BOOL:${SQLITE_ENABLE_PREUPDATE_HOOK}>:SQLITE_ENABLE_PREUPDATE_HOOK>
-        $<$<BOOL:${SQLITE_ENABLE_SESSION}>:SQLITE_ENABLE_SESSION>
-        $<$<BOOL:${SQLITE_OMIT_COMPILEOPTION_DIAGS}>:SQLITE_OMIT_COMPILEOPTION_DIAGS>
-        $<$<BOOL:${SQLITE_OMIT_DEPRECATED}>:SQLITE_OMIT_DEPRECATED>
-        $<$<BOOL:${SQLITE_OMIT_LOAD_EXTENSION}>:SQLITE_OMIT_LOAD_EXTENSION>
     PRIVATE
         SQLITE_DEFAULT_MEMSTATUS=${SQLITE_DEFAULT_MEMSTATUS}
         SQLITE_DEFAULT_SYNCHRONOUS=${SQLITE_DEFAULT_SYNCHRONOUS}
@@ -291,59 +298,63 @@ target_compile_definitions(SQLite3
         $<$<BOOL:${HAVE_UTIME}>:HAVE_UTIME>)
 
 if(MATH_LIBRARY)
-    target_link_libraries(SQLite3
-        INTERFACE $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:${MATH_LIBRARY}>
-        PRIVATE $<$<BOOL:${BUILD_SHARED_LIBS}>:${MATH_LIBRARY}>)
+    target_link_libraries(SQLite3 PUBLIC ${MATH_LIBRARY})
 endif()
 
 if(TARGET Threads::Threads)
-    target_link_libraries(SQLite3
-        INTERFACE $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:Threads::Threads>
-        PRIVATE $<$<BOOL:${BUILD_SHARED_LIBS}>:Threads::Threads>)
+    target_link_libraries(SQLite3 PUBLIC Threads::Threads)
 endif()
 
 if(NOT SQLITE_OMIT_LOAD_EXTENSION)
-    target_link_libraries(SQLite3
-        INTERFACE $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:${CMAKE_DL_LIBS}>
-        PRIVATE $<$<BOOL:${BUILD_SHARED_LIBS}>:${CMAKE_DL_LIBS}>)
+    target_link_libraries(SQLite3 PUBLIC ${CMAKE_DL_LIBS})
 endif()
 
 if(SQLITE_ENABLE_ICU)
-    target_link_libraries(SQLite3
-        INTERFACE $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:ICU::i18n ICU::uc>
-        PRIVATE $<$<BOOL:${BUILD_SHARED_LIBS}>:ICU::i18n ICU::uc>)
+    target_link_libraries(SQLite3 PUBLIC ICU::i18n ICU::uc)
 endif()
 
 # -- Interactive shell ---------------------------------------------------------
 
-add_executable(Shell)
-add_executable(SQLite::Shell ALIAS Shell)
+option(SQLITE_BUILD_SHELL "Build the SQLite3 interactive shell." ON)
 
-set_target_properties(Shell PROPERTIES
-    OUTPUT_NAME sqlite3
-    INSTALL_RPATH "$ORIGIN/../lib")
+if(SQLITE_BUILD_SHELL)
+    add_executable(Shell)
+    add_executable(SQLite::Shell ALIAS Shell)
 
-target_sources(Shell
-    PRIVATE source/shell.c)
+    set_target_properties(Shell PROPERTIES
+        OUTPUT_NAME sqlite3
+        INSTALL_RPATH "$ORIGIN/../lib")
 
-target_link_libraries(Shell
-    PRIVATE SQLite::SQLite3)
+    target_sources(Shell
+        PRIVATE source/shell.c)
 
-if(TARGET PkgConfig::Readline)
-    target_compile_definitions(Shell PRIVATE HAVE_READLINE)
-    target_link_libraries(Shell PRIVATE PkgConfig::Readline)
-endif()
+    target_link_libraries(Shell PRIVATE SQLite::SQLite3)
 
-if(TARGET ZLIB::ZLIB)
-    target_compile_definitions(Shell PRIVATE SQLITE_HAVE_ZLIB)
-    target_link_libraries(Shell PRIVATE ZLIB::ZLIB)
+    if(UNIX)
+        find_package(PkgConfig)
+        if(PKG_CONFIG_FOUND)
+            pkg_search_module(Readline IMPORTED_TARGET readline)
+        endif()
+    endif()
+
+    find_package(ZLIB)
+
+    if(TARGET PkgConfig::Readline)
+        target_compile_definitions(Shell PRIVATE HAVE_READLINE)
+        target_link_libraries(Shell PRIVATE PkgConfig::Readline)
+    endif()
+
+    if(TARGET ZLIB::ZLIB)
+        target_compile_definitions(Shell PRIVATE SQLITE_HAVE_ZLIB)
+        target_link_libraries(Shell PRIVATE ZLIB::ZLIB)
+    endif()
 endif()
 
 # -- Testing -------------------------------------------------------------------
 
 option(BUILD_TESTING "Build the testing tree." ON)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING AND SQLITE_BUILD_SHELL)
     enable_testing()
     add_test(NAME SQLiteShellCheckVersion
         COMMAND SQLite::Shell -version)
@@ -355,21 +366,23 @@ endif()
 
 include(GNUInstallDirs)
 
-install(TARGETS SQLite3 Shell
-    EXPORT SQLite3Targets)
+install(TARGETS SQLite3
+    EXPORT SQLite3Targets
+    FILE_SET HEADERS)
 
-install(FILES source/sqlite3.h
-              source/sqlite3ext.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+if(SQLITE_BUILD_SHELL)
+    install(TARGETS Shell
+        EXPORT SQLite3Targets)
+endif()
 
 # -- Export --------------------------------------------------------------------
 
 install(EXPORT SQLite3Targets
-    FILE SQLite3Targets.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SQLite3
-    NAMESPACE SQLite::)
+    NAMESPACE SQLite::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/SQLite3)
 
 export(EXPORT SQLite3Targets
+    NAMESPACE SQLite::
     FILE ${CMAKE_CURRENT_BINARY_DIR}/SQLite3Targets.cmake)
 
 include(CMakePackageConfigHelpers)
