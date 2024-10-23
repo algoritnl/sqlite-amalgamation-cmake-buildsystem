@@ -1,5 +1,41 @@
 # Changelog
 
+## SQLite Release 3.47.0 On 2024-10-21
+
+1. Allow arbitrary expressions in the second argument to the RAISE function.
+2. If the RHS of the ->> operator is negative, then access array elements counting from the right.
+3. Fix a problem with rolling back hot journal files in the seldom-used unix-dotfile VFS.
+4. FTS5 tables can now be dropped even if they use a non-standard tokenizer that has not been registered.
+5. Fix the group_concat() aggregate function so that it returns an empty string, not a NULL, if it receives a single input value which is an empty string.
+6. Enhance the generate_series() table-valued function so that it is able to recognize and use constraints on its output value.
+7. Preupdate hooks now recognize when a column added by ALTER TABLE ADD COLUMN has a non-null default value.
+8. Performance optimizations:
+    1. Improved reuse of subqueries associated with the IN operator, especially when the IN operator has been duplicated due to predicate push-down.
+    2. Use a Bloom filter on subqueries on the right-hand side of the IN operator, in cases where that seems likely to improve performance.
+    3. Ensure that queries like "SELECT func(a) FROM tab GROUP BY 1" only invoke the func() function once per row.
+    4. No attempt is made to create automatic indexes on a column that is known to be non-selective because of its use in other indexes that have been analyzed.
+    5. Adjustments to the query planner so that it produces better plans for star queries with a large number of dimension tables.
+    6. Add the "order-by-subquery" optimization, that seeks to disable sort operations in outer queries if the desired order is obtained naturally due to ORDER BY clauses in subqueries.
+    7. The "indexed-subtype-expr" optimization strives to use expressions that are part of an index rather than recomputing the expression based on table values, as long as the query planner can prove that the subtype of the expression will never be used.
+    8. Miscellaneous coding tweaks for faster runtimes.
+9. Enhancements to SQLite-related command-line programs:
+    1. Add the experimental sqlite3_rsync program.
+    2. Add extension functions median(), percentile(), percentile_cont(), and percentile_disc() to the CLI.
+    3. Add the .www dot-command to the CLI.
+    4. The sqlite3_analyzer utility now provides a break-out of statistics for WITHOUT ROWID tables.
+    5. The sqldiff utility avoids creating an empty database if its second argument does not exist.
+10. Enhance the sqlite_dbpage table-valued function such that INSERT can be used to increase or decrease the size of the database file.
+11. SQLite no longer makes any use of the "long double" data type, as hardware support for long double is becoming less common and long double creates challenges for some compiler tool chains. Instead, SQLite uses [Dekker's algorithm](https://csclub.uwaterloo.ca/~pbarfuss/dekker1971.pdf) when extended precision is needed.
+12. The TCL Interface for SQLite supports TCL9. Everything probably still works for TCL 8.5 and later, though this is not guaranteed. Users are encouraged to upgrade to TCL9.
+13. JavaScript/WASM:
+    1. Fix a corruption-causing bug in the JavaScript "opfs" VFS.
+    2. Correct "mode=ro" handling for the "opfs" VFS.
+    3. Work around a couple of browser-specific OPFS quirks.
+14. FTS5 Changes:
+    1. Add the fts5_tokenizer_v2 API and the locale=1 option, for creating custom locale-aware tokenizers and fts5 tables that may take advantage of them.
+    2. Add the contentless_unindexed=1 option, for creating contentless fts5 tables that store the values of any UNINDEXED columns persistently in the database.
+    3. Allow an FTS5 table to be dropped even if it uses a custom tokenizer whose implementation is not available.
+
 ## SQLite Release 3.46.1 On 2024-08-13
 
 1. Improved robustness while parsing the tokenize= arguments in FTS5. Forum post 171bcc2bcd.
