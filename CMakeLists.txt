@@ -28,6 +28,11 @@ project(SQLite3
     HOMEPAGE_URL https://github.com/algoritnl/sqlite-amalgamation-cmake-buildsystem
     LANGUAGES C)
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
+    include(CTest)
+endif()
+
 # -- Configuration -------------------------------------------------------------
 
 # Define a function for multiple choice configuration variables.
@@ -176,8 +181,6 @@ if(UNIX)
 endif()
 
 # -- Library -------------------------------------------------------------------
-
-option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
 
 add_library(SQLite3)
 add_library(SQLite::SQLite3 ALIAS SQLite3)
@@ -352,8 +355,6 @@ endif()
 
 # -- Testing -------------------------------------------------------------------
 
-option(BUILD_TESTING "Build the testing tree." ON)
-
 if(BUILD_TESTING AND SQLITE_BUILD_SHELL)
     enable_testing()
     add_test(NAME SQLiteShellCheckVersion
@@ -404,10 +405,12 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SQLite3Config.cmake
 
 # -- Packaging -----------------------------------------------------------------
 
-include(InstallRequiredSystemLibraries)
-set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.md)
-set(CPACK_RESOURCE_FILE_README ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
-set(CPACK_PACKAGE_VERSION_MAJOR ${SQLite3_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${SQLite3_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${SQLite3_VERSION_PATCH})
-include(CPack)
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    include(InstallRequiredSystemLibraries)
+    set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.md)
+    set(CPACK_RESOURCE_FILE_README ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
+    set(CPACK_PACKAGE_VERSION_MAJOR ${SQLite3_VERSION_MAJOR})
+    set(CPACK_PACKAGE_VERSION_MINOR ${SQLite3_VERSION_MINOR})
+    set(CPACK_PACKAGE_VERSION_PATCH ${SQLite3_VERSION_PATCH})
+    include(CPack)
+endif()
