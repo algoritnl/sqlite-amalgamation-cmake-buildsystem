@@ -197,7 +197,7 @@ set_target_properties(SQLite3 PROPERTIES
     OUTPUT_NAME sqlite3${SQLITE_THREADMODEL_SUFFIX}
     DEBUG_POSTFIX "-dbg"
     VERSION ${SQLite3_VERSION}
-    SOVERSION ${SQLite3_VERSION}
+    SOVERSION ${SQLite3_VERSION_MAJOR}
     # This property is needed on Windows to create the import library.
     WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
@@ -396,7 +396,7 @@ configure_package_config_file(
 
 write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/SQLite3ConfigVersion.cmake
-    COMPATIBILITY AnyNewerVersion)
+    COMPATIBILITY SameMajorVersion)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SQLite3Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/SQLite3ConfigVersion.cmake
