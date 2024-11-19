@@ -200,6 +200,11 @@ system if you need them.
   When this option is defined the built-in SQL math functions are added to the
   build automatically.
 
+- `SQLITE_ENABLE_NORMALIZE:BOOL`=**OFF**:
+  value is a **boolean**.  
+  When this option is defined the sqlite3_normalized_sql() API is included in
+  the build.
+
 - `SQLITE_ENABLE_PREUPDATE_HOOK:BOOL`=**OFF**:
   value is a **boolean**.  
   When this option is defined the pre-update hook APIs is included in the build.

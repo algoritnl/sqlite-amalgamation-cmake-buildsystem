@@ -79,6 +79,7 @@ option(SQLITE_ENABLE_FTS5 "Enable version 5 of the full-text search engine." OFF
 option(SQLITE_ENABLE_GEOPOLY "Enable the Geopoly extension." OFF)
 option(SQLITE_ENABLE_ICU "Enable the ICU (International Components for Unicode) extension" OFF)
 option(SQLITE_ENABLE_MATH_FUNCTIONS "Enable the built-in SQL math functions." ON)
+option(SQLITE_ENABLE_NORMALIZE "Enable the sqlite3_normalized_sql() API." OFF)
 option(SQLITE_ENABLE_PREUPDATE_HOOK "Enable the pre-update hook feature." OFF)
 option(SQLITE_ENABLE_RBU "Enable the code that implements the RBU extension." OFF)
 option(SQLITE_ENABLE_RTREE "This option causes SQLite to include support for the R*Tree index extension." OFF)
@@ -213,6 +214,10 @@ target_include_directories(SQLite3
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>
         $<INSTALL_INTERFACE:include>)
+
+if(SQLITE_ENABLE_NORMALIZE)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_ENABLE_NORMALIZE)
+endif()
 
 if(SQLITE_ENABLE_PREUPDATE_HOOK)
     target_compile_definitions(SQLite3 PUBLIC SQLITE_ENABLE_PREUPDATE_HOOK)
