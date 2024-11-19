@@ -10,16 +10,16 @@
 #
 # ------------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.23...3.30)
+cmake_minimum_required(VERSION 3.29...3.31)
 
 # -- Project -------------------------------------------------------------------
 
 # Extract the version info from the header file.
 file(STRINGS source/sqlite3.h _ver_line
-    REGEX "^#define SQLITE_VERSION  *\"[0-9]+\\.[0-9]+\\.[0-9]+\""
+    REGEX "^#define SQLITE_VERSION +\"([0-9]+\\.[0-9]+\\.[0-9]+)\""
     LIMIT_COUNT 1)
-string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+"
-    SQLITE_VERSION ${_ver_line})
+set(SQLITE_VERSION ${CMAKE_MATCH_1})
+message(STATUS "SQLite library version: ${SQLITE_VERSION}")
 unset(_ver_line)
 
 project(SQLite3
