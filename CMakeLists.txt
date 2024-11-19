@@ -10,16 +10,16 @@
 #
 # ------------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.23...3.30)
+cmake_minimum_required(VERSION 3.29...3.31)
 
 # -- Project -------------------------------------------------------------------
 
 # Extract the version info from the header file.
 file(STRINGS source/sqlite3.h _ver_line
-    REGEX "^#define SQLITE_VERSION  *\"[0-9]+\\.[0-9]+\\.[0-9]+\""
+    REGEX "^#define SQLITE_VERSION +\"([0-9]+\\.[0-9]+\\.[0-9]+)\""
     LIMIT_COUNT 1)
-string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+"
-    SQLITE_VERSION ${_ver_line})
+set(SQLITE_VERSION ${CMAKE_MATCH_1})
+message(STATUS "SQLite library version: ${SQLITE_VERSION}")
 unset(_ver_line)
 
 project(SQLite3
@@ -27,6 +27,11 @@ project(SQLite3
     DESCRIPTION "SQLite: an embedded SQL database engine"
     HOMEPAGE_URL https://github.com/algoritnl/sqlite-amalgamation-cmake-buildsystem
     LANGUAGES C)
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
+    include(CTest)
+endif()
 
 # -- Configuration -------------------------------------------------------------
 
@@ -74,6 +79,7 @@ option(SQLITE_ENABLE_FTS5 "Enable version 5 of the full-text search engine." OFF
 option(SQLITE_ENABLE_GEOPOLY "Enable the Geopoly extension." OFF)
 option(SQLITE_ENABLE_ICU "Enable the ICU (International Components for Unicode) extension" OFF)
 option(SQLITE_ENABLE_MATH_FUNCTIONS "Enable the built-in SQL math functions." ON)
+option(SQLITE_ENABLE_NORMALIZE "Enable the sqlite3_normalized_sql() API." OFF)
 option(SQLITE_ENABLE_PREUPDATE_HOOK "Enable the pre-update hook feature." OFF)
 option(SQLITE_ENABLE_RBU "Enable the code that implements the RBU extension." OFF)
 option(SQLITE_ENABLE_RTREE "This option causes SQLite to include support for the R*Tree index extension." OFF)
@@ -177,8 +183,6 @@ endif()
 
 # -- Library -------------------------------------------------------------------
 
-option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
-
 add_library(SQLite3)
 add_library(SQLite::SQLite3 ALIAS SQLite3)
 
@@ -197,7 +201,7 @@ set_target_properties(SQLite3 PROPERTIES
     OUTPUT_NAME sqlite3${SQLITE_THREADMODEL_SUFFIX}
     DEBUG_POSTFIX "-dbg"
     VERSION ${SQLite3_VERSION}
-    SOVERSION ${SQLite3_VERSION}
+    SOVERSION ${SQLite3_VERSION_MAJOR}
     # This property is needed on Windows to create the import library.
     WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
@@ -210,6 +214,10 @@ target_include_directories(SQLite3
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>
         $<INSTALL_INTERFACE:include>)
+
+if(SQLITE_ENABLE_NORMALIZE)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_ENABLE_NORMALIZE)
+endif()
 
 if(SQLITE_ENABLE_PREUPDATE_HOOK)
     target_compile_definitions(SQLite3 PUBLIC SQLITE_ENABLE_PREUPDATE_HOOK)
@@ -225,6 +233,10 @@ endif()
 
 if(SQLITE_OMIT_DEPRECATED)
     target_compile_definitions(SQLite3 PUBLIC SQLITE_OMIT_DEPRECATED)
+endif()
+
+if(SQLITE_OMIT_DESERIALIZE)
+    target_compile_definitions(SQLite3 PUBLIC SQLITE_OMIT_DESERIALIZE)
 endif()
 
 if(SQLITE_OMIT_LOAD_EXTENSION)
@@ -257,7 +269,6 @@ target_compile_definitions(SQLite3
         $<$<BOOL:${SQLITE_LIKE_DOESNT_MATCH_BLOBS}>:SQLITE_LIKE_DOESNT_MATCH_BLOBS>
         $<$<BOOL:${SQLITE_OMIT_AUTOINIT}>:SQLITE_OMIT_AUTOINIT>
         $<$<BOOL:${SQLITE_OMIT_DECLTYPE}>:SQLITE_OMIT_DECLTYPE>
-        $<$<BOOL:${SQLITE_OMIT_DESERIALIZE}>:SQLITE_OMIT_DESERIALIZE>
         $<$<BOOL:${SQLITE_OMIT_JSON}>:SQLITE_OMIT_JSON>
         $<$<BOOL:${SQLITE_OMIT_PROGRESS_CALLBACK}>:SQLITE_OMIT_PROGRESS_CALLBACK>
         $<$<BOOL:${SQLITE_OMIT_SHARED_CACHE}>:SQLITE_OMIT_SHARED_CACHE>
@@ -352,8 +363,6 @@ endif()
 
 # -- Testing -------------------------------------------------------------------
 
-option(BUILD_TESTING "Build the testing tree." ON)
-
 if(BUILD_TESTING AND SQLITE_BUILD_SHELL)
     enable_testing()
     add_test(NAME SQLiteShellCheckVersion
@@ -396,7 +405,7 @@ configure_package_config_file(
 
 write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/SQLite3ConfigVersion.cmake
-    COMPATIBILITY AnyNewerVersion)
+    COMPATIBILITY SameMajorVersion)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SQLite3Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/SQLite3ConfigVersion.cmake
@@ -404,10 +413,12 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SQLite3Config.cmake
 
 # -- Packaging -----------------------------------------------------------------
 
-include(InstallRequiredSystemLibraries)
-set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.md)
-set(CPACK_RESOURCE_FILE_README ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
-set(CPACK_PACKAGE_VERSION_MAJOR ${SQLite3_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${SQLite3_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${SQLite3_VERSION_PATCH})
-include(CPack)
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    include(InstallRequiredSystemLibraries)
+    set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.md)
+    set(CPACK_RESOURCE_FILE_README ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
+    set(CPACK_PACKAGE_VERSION_MAJOR ${SQLite3_VERSION_MAJOR})
+    set(CPACK_PACKAGE_VERSION_MINOR ${SQLite3_VERSION_MINOR})
+    set(CPACK_PACKAGE_VERSION_PATCH ${SQLite3_VERSION_PATCH})
+    include(CPack)
+endif()
