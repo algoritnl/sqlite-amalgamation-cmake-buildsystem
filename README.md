@@ -1,3 +1,5 @@
+[![Build](https://github.com/algoritnl/sqlite-amalgamation-cmake-buildsystem/actions/workflows/build.yaml/badge.svg)](https://github.com/algoritnl/sqlite-amalgamation-cmake-buildsystem/actions/workflows/build.yaml)
+
 # CMake Build System for the SQLite Amalgamation
 
 ## Table of Contents
@@ -27,15 +29,15 @@ windows-latest.
 
 ### Supported Platforms
 
-The build system has been tested on Ubuntu with the GNU and CLang compilers and
+The build system has been tested on Ubuntu with the GNU and Clang compilers and
 on Windows with Visual Studio.
 
-* CMake 3.25.2
-* Ubuntu 22.04 LTS
-* GCC 11.3.9
-* Clang 14.0.0
+* CMake 3.25.2, 3.30.2
+* Ubuntu 22.04 LTS, 24.04 LTS
+* GCC 11.3.9, 13.2.0, 14.2.0
+* Clang 14.0.0, 18.1.3
 * Microsoft Windows 11
-* Visual Studio 2019
+* Visual Studio 2019, 2022
 
 ## Configuration Options
 
@@ -200,9 +202,14 @@ system if you need them.
   When this option is defined the built-in SQL math functions are added to the
   build automatically.
 
+- `SQLITE_ENABLE_NORMALIZE:BOOL`=**OFF**:
+  value is a **boolean**.  
+  When this option is defined the sqlite3_normalized_sql() API is included in
+  the build.
+
 - `SQLITE_ENABLE_PREUPDATE_HOOK:BOOL`=**OFF**:
   value is a **boolean**.  
-  When this option is defined the pre-update hook APIs is included in the build.
+  When this option is defined the pre-update hook APIs are included in the build.
 
 - `SQLITE_ENABLE_RBU:BOOL`=**OFF**:
   value is a **boolean**.  
