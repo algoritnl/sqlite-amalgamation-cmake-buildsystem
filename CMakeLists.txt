@@ -201,19 +201,23 @@ set_target_properties(SQLite3 PROPERTIES
     OUTPUT_NAME sqlite3${SQLITE_THREADMODEL_SUFFIX}
     DEBUG_POSTFIX "-dbg"
     VERSION ${SQLite3_VERSION}
-    SOVERSION ${SQLite3_VERSION_MAJOR}
-    # This property is needed on Windows to create the import library.
-    WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    SOVERSION ${SQLite3_VERSION_MAJOR})
 
 target_sources(SQLite3
     PRIVATE source/sqlite3.c
-    PUBLIC FILE_SET HEADERS BASE_DIRS source
+    INTERFACE FILE_SET HEADERS BASE_DIRS source
         FILES source/sqlite3.h source/sqlite3ext.h)
 
 target_include_directories(SQLite3
     INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>
         $<INSTALL_INTERFACE:include>)
+
+if(WIN32 AND BUILD_SHARED_LIBS)
+    target_compile_definitions(SQLite3
+        PRIVATE "SQLITE_API=__declspec(dllexport)"
+        INTERFACE "SQLITE_API=__declspec(dllimport)")
+endif()
 
 if(SQLITE_ENABLE_NORMALIZE)
     target_compile_definitions(SQLite3 PUBLIC SQLITE_ENABLE_NORMALIZE)
