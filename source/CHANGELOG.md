@@ -1,5 +1,13 @@
 # Changelog
 
+## SQLite Release 3.47.1 On 2024-11-25
+
+1. Fix the makefiles so that they once again honored DESTDIR for the "install" target.
+2. Add the SQLITE_IOCAP_SUBPAGE_READ capability to the VFS, to work around issues on some non-standard VFSes caused by making SQLITE_DIRECT_OVERFLOW_READ the default in version 3.45.0.
+3. Fix problems with line endings in the new sqlite3_rsync.exe utility on Windows.
+4. Fix incorrect answers to certain obscure IN queries caused by new query optimizations added in the 3.47.0 release.
+5. Other minor bug fixes.
+
 ## SQLite Release 3.47.0 On 2024-10-21
 
 1. Allow arbitrary expressions in the second argument to the RAISE function.
