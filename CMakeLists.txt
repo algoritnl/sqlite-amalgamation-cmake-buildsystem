@@ -25,10 +25,10 @@ unset(_ver_line)
 project(SQLite3
     VERSION ${SQLITE_VERSION}
     DESCRIPTION "SQLite: an embedded SQL database engine"
-    HOMEPAGE_URL https://github.com/algoritnl/sqlite-amalgamation-cmake-buildsystem
+    HOMEPAGE_URL https://github.com/algoritnl/sqlite-amalgamation
     LANGUAGES C)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+if(PROJECT_IS_TOP_LEVEL)
     option(BUILD_SHARED_LIBS "Build using shared libraries." OFF)
     include(CTest)
 endif()
@@ -120,6 +120,9 @@ endif()
 
 # -- Introspection -------------------------------------------------------------
 
+include(CMakePushCheckState)
+cmake_push_check_state(RESET)
+
 if(CMAKE_C_COMPILER_ID MATCHES "(GNU|Clang)")
     list(APPEND CMAKE_REQUIRED_DEFINITIONS -D_GNU_SOURCE)
     list(APPEND CMAKE_REQUIRED_LIBRARIES m)
@@ -165,6 +168,8 @@ check_symbol_exists(readlink unistd.h HAVE_READLINK)
 check_symbol_exists(usleep unistd.h HAVE_USLEEP)
 
 check_symbol_exists(utime utime.h HAVE_UTIME)
+
+cmake_pop_check_state()
 
 # -- External Dependencies -----------------------------------------------------
 
@@ -368,7 +373,6 @@ endif()
 # -- Testing -------------------------------------------------------------------
 
 if(BUILD_TESTING AND SQLITE_BUILD_SHELL)
-    enable_testing()
     add_test(NAME SQLiteShellCheckVersion
         COMMAND SQLite::Shell -version)
     set_tests_properties(SQLiteShellCheckVersion PROPERTIES
@@ -387,8 +391,6 @@ if(SQLITE_BUILD_SHELL)
     install(TARGETS Shell
         EXPORT SQLite3Targets)
 endif()
-
-# -- Export --------------------------------------------------------------------
 
 install(EXPORT SQLite3Targets
     NAMESPACE SQLite::
@@ -417,7 +419,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/SQLite3Config.cmake
 
 # -- Packaging -----------------------------------------------------------------
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+if(PROJECT_IS_TOP_LEVEL)
     include(InstallRequiredSystemLibraries)
     set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.md)
     set(CPACK_RESOURCE_FILE_README ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
