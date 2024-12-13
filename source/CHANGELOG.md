@@ -1,5 +1,10 @@
 # Changelog
 
+## SQLite Release 3.47.2 On 2024-12-07
+
+1. Fix a problem in text-to-floating-point conversion for SQLite that can cause values between '1.8446744073709550592eNNN' and '1.8446744073709551609eNNN' for any exponent NNN to be rendered incorrectly. In other words, some numeric text values where the first 16 significant digits are '1844674407370955' might be converted into the wrong floating-point value. See forum thread 569a7209179a7f5e. This problem only arises on x64 and i386 hardware. The problem was introduced in 3.47.0.
+2. Other minor bug fixes.
+
 ## SQLite Release 3.47.1 On 2024-11-25
 
 1. Fix the makefiles so that they once again honored DESTDIR for the "install" target.
