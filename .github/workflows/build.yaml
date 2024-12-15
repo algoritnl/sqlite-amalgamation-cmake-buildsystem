@@ -3,6 +3,7 @@ name: Build
 on:
   push:
     branches: ['feature/**', '*fix/**', 'release/**']
+    tags: ['version-*']
   pull_request:
     branches: ['main', 'develop']
 

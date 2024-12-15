@@ -1,4 +1,4 @@
-[![Build](https://github.com/algoritnl/sqlite-amalgamation-cmake-buildsystem/actions/workflows/build.yaml/badge.svg)](https://github.com/algoritnl/sqlite-amalgamation-cmake-buildsystem/actions/workflows/build.yaml)
+[![Build](https://github.com/algoritnl/sqlite-amalgamation/actions/workflows/build.yaml/badge.svg)](https://github.com/algoritnl/sqlite-amalgamation/actions/workflows/build.yaml)
 
 # CMake Build System for the SQLite Amalgamation
 
