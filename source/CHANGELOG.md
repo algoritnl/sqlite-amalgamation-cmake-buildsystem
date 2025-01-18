@@ -1,5 +1,23 @@
 # Changelog
 
+## SQLite Release 3.48.0 On 2025-01-14
+
+1. Refactor the "configure" script used to help build SQLite from canonical sources, to fix bugs, improve performance, and make the code more maintainable.
+    * This does not affect the "configure" script in the sqlite3-autoconf-NNNNNNN.tar.gz "amalgamation tarball", only the canonical sources. The build system for the amalgamation tarball is unchanged. If you are using the amalgamation tarball, nothing about this change log entry applies to you.
+    * The key innovation here is that Autosetup is now used instead of GNU Autoconf. That seems like a big change, but it is really just an implementation detail. The ./configure script is coded very differently, but should work the same as before.
+    * One advantage of the new configure is that you no longer need to install TCL in order to build most SQLite targets. TCL is still required to run tests or to build accessory programs (like sqlite3_analyzer) that use TCL, but it is not required for most common targets. Hence, as of this release, the only build dependencies are a C compiler and "make" or "nmake".
+2. Improved EXPLAIN QUERY PLAN output for covering indexes.
+3. Allow a two-argument version of the iif() SQL function. Also allow if() as an alternative spelling for iif().
+4. Add the ".dbtotxt" command to the CLI.
+5. Add the SQLITE_IOCAP_SUBPAGE_READ property to the xDeviceCharacteristics method of the sqlite3_io_methods object.
+6. Add the SQLITE_PREPARE_DONT_LOG option to sqlite3_prepare_v3() that prevents warning messages being sent to the error log if the SQL is ill-formed. This allows sqlite3_prepare_v3() to be used to do test compiles of SQL to check for validity without polluting the error log with false messages.
+7. Increase the minimum allowed value of SQLITE_LIMIT_LENGTH from 1 to 30.
+8. Added the SQLITE_FCNTL_NULL_IO file control.
+9. Extend the FTS5 auxiliary API xInstToken() to work with prefix queries via the insttoken configuration option and the fts5_insttoken() SQL function.
+10. Increase the maximum number of arguments to an SQL function from 127 to 1000.
+11. Remove vestigial traces of SQLITE_USER_AUTHENTICATION.
+12. Various obscure bug fixes.
+
 ## SQLite Release 3.47.2 On 2024-12-07
 
 1. Fix a problem in text-to-floating-point conversion for SQLite that can cause values between '1.8446744073709550592eNNN' and '1.8446744073709551609eNNN' for any exponent NNN to be rendered incorrectly. In other words, some numeric text values where the first 16 significant digits are '1844674407370955' might be converted into the wrong floating-point value. See forum thread 569a7209179a7f5e. This problem only arises on x64 and i386 hardware. The problem was introduced in 3.47.0.
