@@ -1,5 +1,21 @@
 # Changelog
 
+## SQLite Release 3.49.0 On 2025-02-06
+
+1. Enhancements to the query planner:
+    1. Improve the query-time index optimization so that it works on WITHOUT ROWID tables.
+    2. Better query plans for large star-query joins. This fixes three different performance regressions that were reported on the SQLite Forum.
+    3. When two or more queries have the same estimated cost, use the one with the fewer bytes per row.
+2. Enhance the iif() SQL function so that it can accept any number of arguments greater than or equal to two.
+3. Enhance the session extension so that it works on databases that make use of generated columns.
+4. Omit the SQLITE_USE_STDIO_FOR_CONSOLE compile-time option which was not implemented correctly and never worked right. In its place add the SQLITE_USE_W32_FOR_CONSOLE_IO compile-time option. This option applies to command-line tools like the CLI only, not to the SQLite core. It causes Win32 APIs to be used for console I/O instead of stdio. This option affects Windows builds only.
+5. Three new options to sqlite3_db_config(). All default to "on".
+    1. SQLITE_DBCONFIG_ENABLE_ATTACH_CREATE
+    2. SQLITE_DBCONFIG_ENABLE_ATTACH_WRITE
+    3. SQLITE_DBCONFIG_ENABLE_COMMENTS
+6. Replace Autotools with Autosetup for the configure script used in the precompiled amalgamation tarball. The configure script for the canonical source code was changed to Autosetup in the previous (3.48.0) release. Only the main SQLite configure script in the amalgamation tarball is changed. The (deprecated) configuration script use by TEA subdirectory of the amalgamation tarball still relies on Autotools.
+7. Various minor patches and fixes for problems seen in the 3.48.0 release.
+
 ## SQLite Release 3.48.0 On 2025-01-14
 
 1. Refactor the "configure" script used to help build SQLite from canonical sources, to fix bugs, improve performance, and make the code more maintainable.
