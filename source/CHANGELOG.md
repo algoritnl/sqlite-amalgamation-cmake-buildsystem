@@ -1,5 +1,11 @@
 # Changelog
 
+## SQLite Release 3.49.1 On 2025-02-18
+
+1. Improve portability of makefiles and configure scripts.
+2. Fix a bug in the concat_ws() function, introduced in version 3.44.0, that could lead to a memory error if the separator string is very large (hundreds of megabytes).
+3. Enhanced the SQLITE_DBCONFIG_LOOKASIDE interface to make it more robust against misuse.
+
 ## SQLite Release 3.49.0 On 2025-02-06
 
 1. Enhancements to the query planner:
