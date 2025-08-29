@@ -1,5 +1,12 @@
 # Changelog
 
+## SQLite Release 3.50.3 On 2025-07-17
+
+1. Fix a possible memory error that can occur if a query is made against against FTS5 index that has been deliberately corrupted in a very specific way.
+2. Fix the parser so that it ignored SQL comments in all places of a CREATE TRIGGER statement. This resolves a problem that was introduced by the introduction of the SQLITE_DBCONFIG_ENABLE_COMMENTS feature in version 3.49.0.
+3. Fix an incorrect answer due to over-optimization of an AND operator. Forum post f4878de3e.
+4. Fix minor makefile issues and documentation typos.
+
 ## SQLite Release 3.50.2 On 2025-06-28
 
 1. Fix the concat_ws() SQL function so that it includes empty strings in the concatenation. Forum post 52503ac21d.
