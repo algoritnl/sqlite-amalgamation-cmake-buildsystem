@@ -1,5 +1,31 @@
 # Changelog
 
+## SQLite Release 3.50.0 On 2025-05-29
+
+1. Add the sqlite3_setlk_timeout() interface which sets a separate timeout, distinct from the sqlite3_busy_timeout(), for blocking locks on builds that support blocking locks.
+2. The SQLITE_DBCONFIG_ENABLE_COMMENTS constraint (added in the previous release) is relaxed slightly so that comments are always allowed when reading the schema out of a pre-existing sqlite_schema table. Comments are only blocked in new SQL.
+3. New SQL functions:
+    1. unistr()
+    2. unistr_quote()
+4. For the %Q and %q conversions in the built-in printf() (which covers the sqlite3_mprintf() API and the format() SQL function and similar) the alternate-form-1 flag ("#") causes control characters to be converted into backslash-escapes suitable for unistr().
+5. CLI enhancements:
+    1. Avoids direct output of most control characters.
+    2. The output of the .dump command makes use of the new unistr() SQL function to encode special characters, unless the --escape mode is set to off.
+    3. Better formatting of complex partial indexes in the output from the ".schema --indent" command.
+6. Enhancements to sqlite3_rsync:
+    1. The requirement that the database be in WAL mode has been removed.
+    2. The sync protocol is enhanced to use less network bandwidth when both sides start out being very similar to one another.
+    3. The sqlite3_rsync program now works on Macs without having to specify the full pathname of the sqlite3_rsync executable on the remote side as long as you install the sqlite3_rsync executable in one of these directories: $HOME/bin:/usr/local/bin:/opt/homebrew/bin
+7. Changes to JSON functions:
+    1. Bug fix: Enforce the JSON5 restriction that the "\0" escape must not be followed by a digit.
+    2. Bug fix: When the LABEL argument to json_group_object(LABEL,VALUE) is NULL, that element of the resulting object is omitted.
+    3. Optimization: If the jsonb_set() or jsonb_replace() functions make a change in the interior of a large JSONB object, they strive to keep the size of the JSONB object unchanged and to modify as few bytes as possible on the interior of the object. This helps reduce I/O as it allows SQLite to write only the page that contains the changed bytes and not all the surrounding pages.
+8. Improved support for building on Cygwin and MinGW and similar, as well as Termux.
+9. Typo fixes in the documentation and in the source code comments.
+10. Miscellaneous performance improvements.
+11. JavaScript/WASM:
+    1. Fix a long-standing filename digest calculation bug in the OPFS SAHPool VFS. Databases created in that VFS by 3.50.0+ cannot be read by older versions of the VFS, but 3.50.0 can backwards-compatibly work with existing databases created by older versions.
+
 ## SQLite Release 3.49.2 On 2025-05-07
 
 1. Fix a bug in the NOT NULL optimization of version 3.40.0 (item 3c in the version 3.40.0 change log) that can lead to a memory error if abused.
