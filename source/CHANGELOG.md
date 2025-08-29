@@ -1,5 +1,9 @@
 # Changelog
 
+## SQLite Release 3.50.4 On 2025-07-30
+
+1. Fix two long-standings cases of the use of uninitialized variables in obscure circumstances.
+
 ## SQLite Release 3.50.3 On 2025-07-17
 
 1. Fix a possible memory error that can occur if a query is made against against FTS5 index that has been deliberately corrupted in a very specific way.
