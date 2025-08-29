@@ -1,5 +1,14 @@
 # Changelog
 
+## SQLite Release 3.50.1 On 2025-06-06
+
+1. Fix a long-standing bug in jsonb_set() and similar that was exposed by new optimizations added in version 3.50.0.
+2. Fix an apparently harmless ASAN warning that can occur on builds that use -DSQLITE_DEFAULT_MEMSTATUS=0.
+3. Fix an off-by-one bug in sqlite3_rsync that can result in the last page not being transferred for the replicate database.
+4. Query planner optimization: Allow the right-hand side of a LEFT JOIN to be flattened even if it is a virtual table.
+5. Fix sqlite3_setlk_timeout() to use a blocking lock when opening a snapshot transaction and when blocked by another process running recovery.
+6. Other minor fixes that were reported after the 3.50.0 release.
+
 ## SQLite Release 3.50.0 On 2025-05-29
 
 1. Add the sqlite3_setlk_timeout() interface which sets a separate timeout, distinct from the sqlite3_busy_timeout(), for blocking locks on builds that support blocking locks.
