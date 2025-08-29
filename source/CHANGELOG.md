@@ -1,5 +1,17 @@
 # Changelog
 
+## SQLite Release 3.50.2 On 2025-06-28
+
+1. Fix the concat_ws() SQL function so that it includes empty strings in the concatenation. Forum post 52503ac21d.
+2. Fix the file-io extension (used by the CLI) so that it can be built using the MinGW compiler chain.
+3. Avoid writing frames with no checksums into the wal file if a savepoint is rolled back after dirty pages have already been spilled into the wal file. Forum post b490f726db.
+4. Fix the Bitvec object to avoid stack overflow when the database is within 60 pages of its maximum size.
+5. Fix a problem with UPDATEs on fts5 tables that contain BLOB values.
+6. Fix an issue with transitive IS constraints on a RIGHT JOIN.
+7. Raise an error early if the number of aggregate terms in a query exceeds the maximum number of columns, to avoid downstream assertion faults.
+8. Ensure that sqlite3_setlk_timeout() holds the database mutex.
+9. Fix typos in API documentation.
+
 ## SQLite Release 3.50.1 On 2025-06-06
 
 1. Fix a long-standing bug in jsonb_set() and similar that was exposed by new optimizations added in version 3.50.0.
