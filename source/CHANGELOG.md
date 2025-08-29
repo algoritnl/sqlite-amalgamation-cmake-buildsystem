@@ -1,5 +1,13 @@
 # Changelog
 
+## SQLite Release 3.49.2 On 2025-05-07
+
+1. Fix a bug in the NOT NULL optimization of version 3.40.0 (item 3c in the version 3.40.0 change log) that can lead to a memory error if abused.
+2. Fix the count-of-view optimization so that it does not give an incorrect answer for a DISTINCT query.
+3. Fix a possible incorrect answer that can result if a UNIQUE constraint of a table contains the PRIMARY KEY column and that UNIQUE constraint is used by an IN operator.
+4. Fix obscure problems with the generate_series() extension function.
+5. Incremental improvements to the configure/make.
+
 ## SQLite Release 3.49.1 On 2025-02-18
 
 1. Improve portability of makefiles and configure scripts.
