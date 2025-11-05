@@ -1,14 +1,11 @@
-name: Build
+name: Continuous Integration
 
 on:
   push:
-    branches: ['feature/**', '*fix/**', 'release/**']
-    tags: ['version-*']
-  pull_request:
     branches: ['main', 'develop']
 
 jobs:
-  build:
+  ci:
     strategy:
       fail-fast: false
       matrix:
