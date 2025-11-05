@@ -1,0 +1,319 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 28,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "diagnostics-default",
+      "description": "Diagnostic settings: warnings off, errors off, debug off",
+      "hidden": true,
+      "warnings": {
+        "dev": false,
+        "deprecated": false,
+        "uninitialized": false,
+        "unusedCli": false,
+        "systemVars": false
+      },
+      "errors": {
+        "dev": false,
+        "deprecated": false
+      },
+      "debug": {
+        "output": false,
+        "tryCompile": false,
+        "find": false
+      },
+      "cacheVariables": {
+        "CMAKE_MESSAGE_LOG_LEVEL": "WARNING",
+        "CMAKE_REQUIRED_QUIET": true
+      }
+    },
+    {
+      "name": "diagnostics-pedantic",
+      "description": "Diagnostic settings: warnings on, errors off, debug off",
+      "hidden": true,
+      "inherits": "diagnostics-default",
+      "warnings": {
+        "dev": true,
+        "deprecated": true,
+        "uninitialized": true,
+        "unusedCli": true
+      },
+      "cacheVariables": {
+        "CMAKE_MESSAGE_LOG_LEVEL": "STATUS",
+        "CMAKE_REQUIRED_QUIET": false
+      }
+    },
+    {
+      "name": "diagnostics-errors",
+      "description": "Diagnostic settings: warnings on, errors on, debug off",
+      "hidden": true,
+      "inherits": "diagnostics-pedantic",
+      "errors": {
+        "dev": true,
+        "deprecated": true
+      }
+    },
+    {
+      "name": "diagnostics-debug",
+      "description": "Diagnostic settings: warnings on, errors off, debug on",
+      "hidden": true,
+      "inherits": "diagnostics-pedantic",
+      "debug": {
+        "output": true,
+        "tryCompile": true,
+        "find": true
+      },
+      "cacheVariables": {
+        "CMAKE_MESSAGE_LOG_LEVEL": "DEBUG"
+      }
+    },
+    {
+      "name": "language-std-c99",
+      "description": "Set C language standard to C99",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_C_STANDARD": "99",
+        "CMAKE_C_STANDARD_REQUIRED": true,
+        "CMAKE_C_EXTENSIONS": true
+      }
+    },
+    {
+      "name": "compiler-clang",
+      "description": "Set C language compiler to Clang",
+      "hidden": true,
+      "environment": {
+        "CC": "clang"
+      },
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "-Wall"
+      }
+    },
+    {
+      "name": "generator-ninja-multi",
+      "description": "Use Ninja Multi-Config generator",
+      "hidden": true,
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "out/build",
+      "installDir": "out/stage"
+    },
+    {
+      "name": "common",
+      "description": "Common preset combining diagnostics, language standard, compiler, and generator",
+      "hidden": true,
+      "inherits": [
+        "diagnostics-pedantic",
+        "language-std-c99",
+        "compiler-clang",
+        "generator-ninja-multi"
+      ]
+    },
+    {
+      "name": "shared",
+      "description": "Configure the build system for building shared libraries",
+      "displayName": "Shared Libraries",
+      "inherits": "common",
+      "cacheVariables": {
+        "BUILD_SHARED_LIBS": true
+      }
+    },
+    {
+      "name": "static",
+      "description": "Configure the build system for building static libraries",
+      "displayName": "Static Libraries",
+      "inherits": "common",
+      "cacheVariables": {
+        "BUILD_SHARED_LIBS": false
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "common",
+      "description": "Common build settings",
+      "hidden": true,
+      "jobs": 8,
+      "targets": "all",
+      "cleanFirst": false,
+      "verbose": true
+    },
+    {
+      "name": "debug-shared",
+      "description": "Build shared libraries in Debug configuration",
+      "displayName": "Debug Shared Libraries",
+      "inherits": "common",
+      "configurePreset": "shared",
+      "configuration": "Debug"
+    },
+    {
+      "name": "debug-static",
+      "description": "Build static libraries in Debug configuration",
+      "displayName": "Debug Static Libraries",
+      "inherits": "common",
+      "configurePreset": "static",
+      "configuration": "Debug"
+    },
+    {
+      "name": "release-shared",
+      "description": "Build shared libraries in Release configuration",
+      "displayName": "Release Shared Libraries",
+      "inherits": "common",
+      "configurePreset": "shared",
+      "configuration": "Release"
+    },
+    {
+      "name": "release-static",
+      "description": "Build static libraries in Release configuration",
+      "displayName": "Release Static Libraries",
+      "inherits": "common",
+      "configurePreset": "static",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "common",
+      "description": "Common test settings",
+      "hidden": true,
+      "output": {
+        "shortProgress": false,
+        "verbosity": "extra",
+        "debug": false,
+        "outputOnFailure": true,
+        "quiet": false
+      },
+      "execution": {
+        "stopOnFailure": false,
+        "jobs": 8,
+        "timeout": 300,
+        "noTestsAction": "ignore"
+      }
+    },
+    {
+      "name": "debug-shared",
+      "description" : "Test shared libraries in Debug configuration",
+      "displayName": "Debug Shared Libraries",
+      "inherits": "common",
+      "configurePreset": "shared",
+      "configuration": "Debug"
+    },
+    {
+      "name": "debug-static",
+      "description" : "Test static libraries in Debug configuration",
+      "displayName": "Debug Static Libraries",
+      "inherits": "common",
+      "configurePreset": "static",
+      "configuration": "Debug"
+    },
+    {
+      "name": "release-shared",
+      "description" : "Test shared libraries in Release configuration",
+      "displayName": "Release Shared Libraries",
+      "inherits": "common",
+      "configurePreset": "shared",
+      "configuration": "Release"
+    },
+    {
+      "name": "release-static",
+      "description" : "Test static libraries in Release configuration",
+      "displayName": "Release Static Libraries",
+      "inherits": "common",
+      "configurePreset": "static",
+      "configuration": "Release"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "common",
+      "description": "Common package settings",
+      "hidden": true,
+      "output": {
+        "debug": false,
+        "verbose": true
+      },
+      "configurations": ["Debug", "Release"],
+      "generators": ["ZIP", "TGZ"]
+    },
+    {
+      "name": "shared",
+      "description": "Package shared libraries",
+      "displayName": "Shared Libraries",
+      "inherits": "common",
+      "configurePreset": "shared"
+    },
+    {
+      "name": "static",
+      "description": "Package static libraries",
+      "displayName": "Static Libraries",
+      "inherits": "common",
+      "configurePreset": "static"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "ci-shared",
+      "description": "Run Debug and Release configurations for shared libraries",
+      "displayName": "Shared Libraries",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "shared"
+        },
+        {
+          "type": "build",
+          "name": "debug-shared"
+        },
+        {
+          "type": "test",
+          "name": "debug-shared"
+        },
+        {
+          "type": "build",
+          "name": "release-shared"
+        },
+        {
+          "type": "test",
+          "name": "release-shared"
+        },
+        {
+          "type": "package",
+          "name": "shared"
+        }
+      ]
+    },
+    {
+      "name": "ci-static",
+      "description": "Run Debug and Release configurations for static libraries",
+      "displayName": "Static Libraries",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "static"
+        },
+        {
+          "type": "build",
+          "name": "debug-static"
+        },
+        {
+          "type": "test",
+          "name": "debug-static"
+        },
+        {
+          "type": "build",
+          "name": "release-static"
+        },
+        {
+          "type": "test",
+          "name": "release-static"
+        },
+        {
+          "type": "package",
+          "name": "static"
+        }
+      ]
+    }
+  ]
+}

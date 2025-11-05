@@ -9,36 +9,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        uname: [Linux, Darwin, Windows]
-        libraries: [Static, Shared]
-        config: [Debug, Release]
-        include:
-          - { uname: Linux, os: ubuntu-latest }
-          - { uname: Darwin, os: macos-latest }
-          - { uname: Windows, os: windows-latest }
-          - { libraries: Static, shared: NO }
-          - { libraries: Shared, shared: YES }
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     runs-on: ${{matrix.os}}
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Generate build system
-      run: cmake -B ${{github.workspace}}/build
-                 -DCMAKE_BUILD_TYPE:STRING=${{matrix.config}}
-                 -DBUILD_SHARED_LIBS:BOOL=${{matrix.shared}}
-                 -DBUILD_TESTING:BOOL=YES
+    - name: Run cmake workflow for shared libraries
+      run: cmake --workflow --fresh --preset=ci-shared
 
-    - name: Build targets
-      run: cmake --build ${{github.workspace}}/build
-                 --config ${{matrix.config}}
-
-    - name: Perform tests
-      run: ctest --test-dir ${{github.workspace}}/build
-                 --build-config ${{matrix.config}}
-                 --verbose
-
-    - name: Create package
-      working-directory: ${{github.workspace}}/build
-      run: cpack -C ${{matrix.config}} -G ZIP -V
+    - name: Run cmake workflow for static libraries
+      run: cmake --workflow --fresh --preset=ci-static
