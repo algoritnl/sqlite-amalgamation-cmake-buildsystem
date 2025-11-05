@@ -161,6 +161,10 @@ system if you need them.
   value is a **boolean**.  
   This option activates extra code that attempts to detect misuse of the SQLite API.
 
+- `SQLITE_ENABLE_CARRAY:BOOL`=**OFF**:
+  value is a **boolean**.  
+  This option enables the carray() extension.
+
 - `SQLITE_ENABLE_DBSTAT_VTAB:BOOL`=**OFF**:
   value is a **boolean**.  
   This option enables the dbstat virtual table.
@@ -206,6 +210,10 @@ system if you need them.
   value is a **boolean**.  
   When this option is defined the sqlite3_normalized_sql() API is included in
   the build.
+
+- `SQLITE_ENABLE_PERCENTILE:BOOL`=**OFF**:
+  value is a **boolean**.  
+  This option enables the percentile extension.
 
 - `SQLITE_ENABLE_PREUPDATE_HOOK:BOOL`=**OFF**:
   value is a **boolean**.  
