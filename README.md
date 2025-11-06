@@ -1,3 +1,15 @@
+# WARNING: DEPRECATED
+
+## This version of the repository is deprecated.
+
+It is unlikely to receive any further updates.
+
+Please start using its replacement which can be found at the original URL:
+
+# https://github.com/algoritnl/sqlite-amalgamation
+
+---
+
 [![Continuous Integration](https://github.com/algoritnl/sqlite-amalgamation/actions/workflows/ci.yaml/badge.svg)](https://github.com/algoritnl/sqlite-amalgamation/actions/workflows/ci.yaml)
 
 # CMake Build System for the SQLite Amalgamation
